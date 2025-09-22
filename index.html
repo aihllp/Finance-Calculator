@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="calculator">
+    <h1>Finance Calculator</h1>
+
+    <label>Income:
+      <input type="number" id="income" placeholder="Enter income">
+    </label>
+    <label>Expenses:
+      <input type="number" id="expenses" placeholder="Enter expenses">
+    </label>
+    <label>Assets:
+      <input type="number" id="assets" placeholder="Enter assets">
+    </label>
+    <label>Liabilities:
+      <input type="number" id="liabilities" placeholder="Enter liabilities">
+    </label>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="results">
+      <p><strong>Cashflow:</strong> <span id="cashflow">0</span></p>
+      <p><strong>Net Worth:</strong> <span id="networth">0</span></p>
+      <p><strong>Wealth Ratio:</strong> <span id="wealthratio">0</span></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
