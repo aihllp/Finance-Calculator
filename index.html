@@ -10,7 +10,7 @@
   <div class="max-w-5xl mx-auto px-6">
     <!-- Header -->
     <div class="text-center mb-6">
-      <h1 class="text-2xl font-bold">Finance Calculator</h1>
+      <h1 class="text-2xl font-bold">Personal Finance Calculator</h1>
       <p class="text-sm text-gray-500 mt-1">Breakdown your income, expenses, assets & liabilities</p>
     </div>
 
@@ -18,15 +18,15 @@
     <div class="grid gap-6 md:grid-cols-2">
       <!-- Income Card -->
       <div class="bg-white rounded-2xl shadow p-6">
-        <h2 class="text-lg font-semibold text-blue-600 mb-4">Income</h2>
+        <h2 class="text-lg font-semibold text-blue-600 mb-4">Monthly Income</h2>
         <div class="space-y-4">
           <div>
-            <label class="block text-gray-700 mb-1">Salary</label>
+            <label class="block text-gray-700 mb-1">Salary (RM)</label>
             <input id="salary" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-300" placeholder="Enter salary">
           </div>
           <div>
-            <label class="block text-gray-700 mb-1">Other Income</label>
-            <input id="otherIncome" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-300" placeholder="Enter other income">
+            <label class="block text-gray-700 mb-1">Other Income (RM)</label>
+            <input id="otherIncome" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-300" placeholder="e.g rental. commissions, monthly dividends">
           </div>
         </div>
       </div>
@@ -36,12 +36,28 @@
         <h2 class="text-lg font-semibold text-red-600 mb-4">Monthly Expenses</h2>
         <div class="space-y-4">
           <div>
-            <label class="block text-gray-700 mb-1">Total Finance Repayment</label>
-            <input id="financeRepayment" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="Enter finance repayment">
+            <label class="block text-gray-700 mb-1">Total Credit Card Repayment (RM)</label>
+            <input id="creditCardRepayment" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="Total credit card monthly repayment">
           </div>
           <div>
-            <label class="block text-gray-700 mb-1">Total Other Expenses</label>
-            <input id="otherExpenses" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="Enter other expenses">
+            <label class="block text-gray-700 mb-1">Total Vehicle Loan/Financing Repayment (RM)</label>
+            <input id="vehicleLoanRepayment" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="e.g motorcycle, car">
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Total Property Loan/Financing Repayment (RM)</label>
+            <input id="propertyLoanRepayment" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="e.g house, apartment, shoplot, land purchase">
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Personal & Household Expenses (RM)</label>
+            <input id="personalHouseholdExpenses" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="e.g groceries, utilities, rent, phone, internet, subscriptions">
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Insurance/Takaful Expenses (RM)</label>
+            <input id="insuranceExpenses" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="e.g insurance/takaful paid">
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Total Other Expenses (RM)</label>
+            <input id="otherExpenses" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-300" placeholder="Any other expenses not listed above">
           </div>
         </div>
       </div>
@@ -51,16 +67,20 @@
         <h2 class="text-lg font-semibold text-green-600 mb-4">Assets</h2>
         <div class="space-y-4">
           <div>
-            <label class="block text-gray-700 mb-1">Total Savings</label>
-            <input id="savings" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-300" placeholder="Enter savings">
+            <label class="block text-gray-700 mb-1">Total Savings (RM)</label>
+            <input id="savings" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-300" placeholder="e.g Bank Account, Tabung Haji, Fixed Deposit">
           </div>
           <div>
-            <label class="block text-gray-700 mb-1">Total Investments</label>
-            <input id="investments" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-300" placeholder="Enter investments">
+            <label class="block text-gray-700 mb-1">Total Property Value (RM)</label>
+            <input id="propertyValue" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-300" placeholder="e.g House, Apartment, Shoplot, Land, Precious Metals, Valuable Items">
           </div>
           <div>
-            <label class="block text-gray-700 mb-1">Total Retirement Fund</label>
-            <input id="retirement" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-300" placeholder="Enter retirement fund">
+            <label class="block text-gray-700 mb-1">Total Investments Value (RM)</label>
+            <input id="investmentsValue" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-300" placeholder="e.g ASB, Stocks, Bonds, Mutual Funds, ETFs, Crypto Assets">
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Total Retirement Fund (RM)</label>
+            <input id="retirementFund" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-300" placeholder="e.g Retirement Account, EPF, PRS">
           </div>
         </div>
       </div>
@@ -70,12 +90,20 @@
         <h2 class="text-lg font-semibold text-yellow-600 mb-4">Liabilities</h2>
         <div class="space-y-4">
           <div>
-            <label class="block text-gray-700 mb-1">Total Balance Loan</label>
-            <input id="balanceLoan" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-yellow-300" placeholder="Enter balance loan">
+            <label class="block text-gray-700 mb-1">Total Credit Card Balance (RM)</label>
+            <input id="creditCardBalance" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-yellow-300" placeholder="Enter total credit card remaining balance">
           </div>
           <div>
-            <label class="block text-gray-700 mb-1">Other Liabilities</label>
-            <input id="otherLiabilities" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-yellow-300" placeholder="Enter other liabilities">
+            <label class="block text-gray-700 mb-1">Total Vehicle Loan/Financing Balance (RM)</label>
+            <input id="vehicleLoanBalance" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-yellow-300" placeholder="Enter total vehicle loan remaining balance">
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Total Property Financing Balance (RM)</label>
+            <input id="propertyFinancingBalance" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-yellow-300" placeholder="Enter total property financing remaining balance">
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Other Loan/Financing Balance (RM)</label>
+            <input id="otherLiabilities" type="number" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-yellow-300" placeholder="Enter other loan/financing balance">
           </div>
         </div>
       </div>
