@@ -17,7 +17,7 @@
     overflow-y: scroll;
   }
   section {
-    scroll-snap-align: start;
+    scroll-snap-align: center;
   }
   </style>
 </head>
@@ -48,7 +48,7 @@
       </p>
 
       <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-        <a href="#income" class="px-6 py-3 bg-indigo-500 rounded-lg font-semibold hover:bg-yellow-600 transition">
+        <a href="#calculator" class="px-6 py-3 bg-indigo-500 rounded-lg font-semibold hover:bg-yellow-600 transition">
           Start Now
         </a>
       </div>
@@ -71,7 +71,6 @@
     <div class="space-y-10"> <!-- spacing between all cards -->
 
   <!-- Income Card -->
-  <section id="income" class="relative min-h-screen bg-cover bg-center flex items-center justify-center text-white">
   <div data-aos="fade-up" data-aos-delay="100">
   <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -99,10 +98,8 @@
     </div>
   </div>
   </div>
-  </section>
 
   <!-- Expenses Card -->
-   <section id="expenses" class="relative min-h-screen bg-cover bg-center flex items-center justify-center text-white">
    <div data-aos="fade-up" data-aos-delay="100">
   <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -145,10 +142,8 @@
     </div>
   </div>
   </div>
-  </section>
 
   <!-- Assets Card -->
-  <section id="calculator" class="relative min-h-screen bg-cover bg-center flex items-center justify-center text-white">
    <div data-aos="fade-up" data-aos-delay="100">
   <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -182,10 +177,8 @@
     </div>
   </div>
   </div>
-  </section>
 
   <!-- Liabilities Card -->
-  <section id="calculator" class="relative min-h-screen bg-cover bg-center flex items-center justify-center text-white">
    <div data-aos="fade-up" data-aos-delay="100">
   <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -220,7 +213,6 @@
   </div>
 </div>
 </div>
-</section>
 
     <!-- Button -->
     <div class="mt-6 text-center">
