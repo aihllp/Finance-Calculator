@@ -23,30 +23,6 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-<!-- Hero Section -->
-<section 
-  class="relative h-screen bg-cover bg-center flex items-center justify-center text-white"
-  style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1470&q=80');">
-  
-  <!-- Overlay -->
-  <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-
-  <!-- Content -->
-  <div class="relative z-10 container mx-auto flex flex-col md:flex-row items-center px-6 md:px-12">
-    
-    <!-- Left content -->
-    <div class="md:w-1/2 text-center md:text-left" data-aos="fade-right">
-      <h1 class="mt-6 text-4xl md:text-5xl font-bold leading-tight">
-        Personal <span class="text-yellow-400">Financial Calculator</span>
-      </h1>
-      <p class="mt-4 text-lg text-gray-200">
-        Easily calculate your <span class="font-semibold">cashflow</span>, 
-        <span class="font-semibold">net worth</span>, and track your <span class="font-semibold">financial health</span> in real-time.
-      </p>
-    </div>
-  </div>
-</section>
-
   <!-- Calculator Section -->
   
   <div class="max-w-5xl mx-auto px-6">
@@ -66,12 +42,12 @@
       <!-- Left: Description -->
       <div>
         <h2 class="text-xl font-semibold text-green-700 mb-2">Monthly Income</h2>
-        <p class="text-gray-700 text-sm leading-relaxed">
+        <p class="text-gray-700 text-sm leading-relaxed mb-6git a">
           Income refers to the money you earn regularly, such as your salary, side jobs, 
           or business profits. Keeping track of income helps you plan and budget effectively.
         </p>
-        <p class="text-sm text-gray-500 mt-1">Net income is obtained from main job (excluding EPF, Sosco & all mandatory deductions).
-          Other income is received from additional sources e.g rental, commissions, dividends.</p>
+          <p class="text-sm font-semibold text-gray-500 mb-5">Net income: Obtained from main job (excluding EPF, Sosco & all mandatory deductions).</p>
+          <p class="text-sm font-semibold text-gray-500 mb-5">Other income: Earned from additional sources (e.g rental, commissions, dividends).</p>
       </div>
       <!-- Right: Inputs -->
       <div class="space-y-4">
@@ -94,12 +70,17 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
       <!-- Left: Description -->
       <div>
-        <h2 class="text-xl font-semibold text-red-700 mb-2">Expenses</h2>
-        <p class="text-gray-700 text-sm leading-relaxed">
+        <h2 class="text-xl font-semibold text-red-700 mb-2">Monthly Expenses</h2>
+        <p class="text-gray-700 text-sm leading-relaxed mb-6">
           Expenses are the costs you pay for living, such as food, rent, and transport. 
           Tracking your expenses shows where your money goes and how to save.
         </p>
-        <p class="text-sm text-gray-500 mt-1"></p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Credit Card Repayment: Total of all credit card monthly repayment.</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Vehicle Loan/Financing Repayment: Total of all vehicle loan monthly repayment (e.g motorcycle, car, etc).</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Property Loan/Financing Repayment: Total of all property loan monthly repayment (e.g house, shoplot, land, etc).</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Personal & Household Expenses: Total expenses for all necessities (e.g groceries, utilities, etc).</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Insurance/Takaful Expenses: Total monthly insurance/takaful paid.</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Other expenses: Any other expenses not listed above.</p>
       </div>
       <!-- Right: Inputs -->
       <div class="space-y-4">
@@ -139,10 +120,14 @@
       <!-- Left: Description -->
       <div>
         <h2 class="text-xl font-semibold text-blue-700 mb-2">Assets</h2>
-        <p class="text-gray-700 text-sm leading-relaxed">
+        <p class="text-gray-700 text-sm leading-relaxed mb-6">
           Assets are what you own that have value, such as savings, investments, or property. 
           Recording assets helps measure your financial strength.
         </p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Savings: Total value of cash savings and its equivalent (e.g Bank Account, Tabung Haji, Fixed Deposit).</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Property Value: Total Total current value of property in holdings (e.g House, shoplot, land, precious metals, valuable items).</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Investment Value: Total current value of investments (e.g ASB, stocks, crypto asset, etc).</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Retirement Fund: Total value of aset designed for retirement (e.g EPF, PRS).</p>
       </div>
       <!-- Right: Inputs -->
       <div class="space-y-4">
@@ -174,10 +159,14 @@
       <!-- Left: Description -->
       <div>
         <h2 class="text-xl font-semibold text-purple-700 mb-2">Liabilities</h2>
-        <p class="text-gray-700 text-sm leading-relaxed">
+        <p class="text-gray-700 text-sm leading-relaxed mb-6">
           Liabilities are debts or obligations you owe, like loans or credit card balances. 
           Understanding liabilities helps you manage repayment better.
         </p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Card Credit Balance: Total remaining balance of all credit card.</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Vehicle Loan/Financing Balance: Total remaining balance of all vehicle loans/financing.</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Total Property Financing Balance: Total remaining balance of all property financing.</p>
+        <p class="text-sm font-semibold text-gray-500 mb-5">Other Loan/Financing Balance: Remaining balance of all any other loans/financing.</p>
       </div>
       <!-- Right: Inputs -->
       <div class="space-y-4">
@@ -208,9 +197,10 @@
       <button onclick="calculate()" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">Calculate</button>
     </div>
 
-    <!-- Summary + Results row -->
-    <div data-aos="fade-up" data-aos-delay="100">
+  <!-- Summary + Results row -->
+  <div data-aos="fade-up" data-aos-delay="100">
     <div class="mt-6 grid gap-6 md:grid-cols-3">
+
       <!-- Summary card (spans 1 col on md) -->
       <div class="bg-white rounded-2xl shadow p-6 md:col-span-1">
         <h3 class="text-lg font-semibold mb-4">Summary</h3>
@@ -243,17 +233,14 @@
               <p class="text-gray-500 text-sm">Cashflow</p>
               <p class="text-2xl font-bold text-blue-600" id="cashflow">0</p>
             </div>
-
             <div class="bg-green-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Net Worth</p>
               <p class="text-2xl font-bold text-green-600" id="networth">0</p>
             </div>
-
             <div class="bg-purple-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Wealth Ratio</p>
               <p class="text-2xl font-bold text-purple-600" id="wealthratio">0</p>
             </div>
-
             <div class="bg-yellow-50 rounded-xl p-4">
               <p class="text-gray-500 text-sm">Financial Health</p>
               <p id="health" class="text-2xl font-bold">-</p>
@@ -265,8 +252,7 @@
         </div>
       </div>
     </div>
-    </div>
-    </div>
+  </div>
 
     <!-- small footer note -->
     <div class="text-center text-xs text-gray-400 mt-6">
