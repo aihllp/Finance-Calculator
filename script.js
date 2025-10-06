@@ -41,51 +41,145 @@ function calculate() {
   document.getElementById("totalAssets").textContent = formatRM(assets);
   document.getElementById("totalLiabilities").textContent = formatRM(liabilities);
 
-  // Results
+  // Financial status calculations
   const cashflow = income - expenses;
   const networth = assets - liabilities;
   const wealthratio = expenses === 0 ? Infinity : (networth / expenses);
-
-  // Financial health evaluation
-  let level = "", textClass = "text-gray-700", bgClass = "bg-gray-500", percent = 0;
-
-  if (wealthratio < 1) {
-    level = "BANKRAP!";
-    textClass = "text-red-600"; bgClass = "bg-red-600"; percent = 10;
-  } else if (wealthratio <= 5) {
-    level = "KRITIKAL";
-    textClass = "text-orange-500"; bgClass = "bg-orange-500"; percent = 25;
-  } else if (wealthratio <= 10) {
-    level = "Normal";
-    textClass = "text-gray-700"; bgClass = "bg-gray-500"; percent = 40;
-  } else if (wealthratio <= 20) {
-    level = "Sihat";
-    textClass = "text-green-600"; bgClass = "bg-green-600"; percent = 55;
-  } else if (wealthratio <= 50) {
-    level = "Cergas";
-    textClass = "text-lime-600"; bgClass = "bg-lime-500"; percent = 70;
-  } else if (wealthratio <= 96) {
-    level = "Athlete";
-    textClass = "text-blue-600"; bgClass = "bg-blue-600"; percent = 85;
-  } else if (wealthratio <= 168) {
-    level = "Olympic Athlete";
-    textClass = "text-purple-600"; bgClass = "bg-purple-600"; percent = 95;
-  } else {
-    level = "A Free MAN!";
-    textClass = "text-yellow-600"; bgClass = "bg-yellow-400"; percent = 100;
-  }
+  const savingsratio = income === 0 ? 0 : ((income - expenses) / income) * 100;
+  const liquidityratio = expenses === 0 ? Infinity : (assets / expenses);
+  const debtServiceRatio = income === 0 ? 0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
 
   // Update UI
   document.getElementById("cashflow").textContent = formatRM(cashflow);
   document.getElementById("networth").textContent = formatRM(networth);
   document.getElementById("wealthratio").textContent = wealthratio === Infinity ? "∞" : wealthratio.toFixed(2);
+  document.getElementById("savingsratio").textContent = savingsratio.toFixed(2) + "%";
+  document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ? "∞" : liquidityratio.toFixed(2);
+  document.getElementById("debtServiceRatio").textContent = debtServiceRatio.toFixed(2) + "%";
 
-  const healthEl = document.getElementById("health");
-  healthEl.textContent = level;
-  healthEl.className = "text-2xl font-bold " + textClass;
+  updateGaugeFromResult();
+}
 
-  const fill = document.getElementById("health-fill");
-  fill.style.width = percent + "%";
-  fill.className = "h-2 rounded " + bgClass + " w-0 transition-all duration-500";
-  setTimeout(() => { fill.style.width = percent + "%"; }, 10);
+AOS.init({
+  duration: 1000,   // animation duration (1s)
+  once: true        // animate only once
+});
+
+// Gauge chart using Chart.js
+const ctx = document.getElementById('healthGauge').getContext('2d');
+
+let wealthRatio = 0; // initial needle position
+
+const data = {
+      labels: [
+        '<1 Bankrap!',
+        '1-5 Kritikal',
+        '6-10 Normal',
+        '10-20 Sihat',
+        '21-50 Cergas',
+        '50-96 Athlete',
+        '>96 Olympic Athlete',
+        '>168 A Free MAN!'
+      ],
+      datasets: [{
+        data: [1, 5, 5, 10, 30, 46, 72, 72], // relative widths
+        backgroundColor: [
+          '#ff0000', // Bankrap
+          '#ff9900', // Kritikal
+          '#cccc00', // Normal
+          '#66cc00', // Sihat
+          '#00cc66', // Cergas
+          '#0099cc', // Athlete
+          '#9933cc', // Olympic
+          '#000000'  // Free Man
+        ],
+        borderWidth: 1,
+        borderColor: '#fff'
+      }]
+    };
+
+const options = {
+  rotation: -90, // start angle
+  circumference: 180, // half circle
+  cutout: '70%', // inner radius
+  plugins: {
+    legend: {
+      display: true,
+      position: 'bottom'
+    }
+  }
+};
+
+// Needle plugin
+const gaugeNeedle = {
+  id: 'gaugeNeedle',
+  afterDatasetDraw(chart, args, opts) {
+    const { ctx } = chart;
+    const meta = chart.getDatasetMeta(0);
+    const xCoor = meta.data[0].x;
+    const yCoor = meta.data[0].y;
+    const outerRadius = meta.data[0].outerRadius;
+
+    // Map wealthRatio (0–200 scale) to 0–180 degrees
+    const maxValue = 200;
+    const angle = Math.PI + (wealthRatio / maxValue) * Math.PI;
+
+    // Needle endpoint
+    const needleRadius = outerRadius * 0.9; 
+    const needleX = xCoor + needleRadius * Math.cos(angle);
+    const needleY = yCoor + needleRadius * Math.sin(angle);
+
+    // Draw needle
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(xCoor, yCoor);
+    ctx.lineTo(needleX, needleY);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    // Draw center circle
+    ctx.beginPath();
+    ctx.arc(xCoor, yCoor, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.restore();
+  }
+};
+    
+// create chart
+const wealthGauge = new Chart(ctx, {
+  type: 'doughnut',
+  data: data,
+  options: options,
+  plugins: [gaugeNeedle]
+});
+
+// sync with calculation result
+function updateGaugeFromResult() {
+  const ratioText = document.getElementById('wealthratio').innerText;
+  const targetValue = parseFloat(ratioText) || 0; // <- keep this name consistent
+  const maxValue = 200;
+
+  // Clamp value
+  const clampedTarget = Math.min(targetValue, maxValue);
+
+  // Smooth animation
+  let start = wealthRatio;
+  let end = clampedTarget;
+  let startTime = null;
+  const duration = 800; // ms
+
+  function animateNeedle(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    wealthRatio = start + (end - start) * progress;
+    wealthGauge.update();
+
+    if (progress < 1) {
+      requestAnimationFrame(animateNeedle);
+    }
+  }
+
+  requestAnimationFrame(animateNeedle);
 }

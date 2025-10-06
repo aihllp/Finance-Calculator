@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn Financial Terms</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Header -->
+  <header class="bg-green-700 text-white py-4 text-center shadow">
+    <h1 class="text-xl font-bold">Learn the Financial Terms</h1>
+  </header>
+
+  <!-- Section -->
+  <main class="max-w-4xl mx-auto px-6 py-10">
+    <p class="text-gray-600 mb-10 text-center">
+      Tap on each term below to understand what it means and how it relates to your financial health.
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- Card 1 -->
+      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('cashflow')">
+        <h3 class="font-semibold text-gray-800">Cashflow</h3>
+        <p id="cashflow-info" class="hidden text-gray-600 text-sm mt-2">
+          Cashflow is the money moving in and out of your pocket. Positive cashflow means you’re earning more than you spend.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('networth')">
+        <h3 class="font-semibold text-gray-800">Net Worth</h3>
+        <p id="networth-info" class="hidden text-gray-600 text-sm mt-2">
+          Net worth is what you own (assets) minus what you owe (liabilities). A positive net worth means your assets exceed your debts.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('savingsratio')">
+        <h3 class="font-semibold text-gray-800">Savings Ratio</h3>
+        <p id="savingsratio-info" class="hidden text-gray-600 text-sm mt-2">
+          Savings ratio shows how much of your income you save after expenses. The higher, the better for your financial stability.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('liquidityratio')">
+        <h3 class="font-semibold text-gray-800">Liquidity Ratio</h3>
+        <p id="liquidityratio-info" class="hidden text-gray-600 text-sm mt-2">
+          Liquidity ratio measures how easily you can cover expenses using your available assets.
+        </p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('debtservice')">
+        <h3 class="font-semibold text-gray-800">Debt Service Ratio</h3>
+        <p id="debtservice-info" class="hidden text-gray-600 text-sm mt-2">
+          Debt service ratio shows what portion of your income goes to repaying loans. Keep it below 40% for financial health.
+        </p>
+      </div>
+    </div>
+
+    <!-- Back button -->
+    <div class="text-center mt-12">
+      <a href="index.html" class="inline-block bg-green-700 hover:bg-green-800 text-white py-3 px-6 rounded-full transition">
+        ← Back to Calculator
+      </a>
+    </div>
+  </main>
+
+  <script>
+    function toggleInfo(id) {
+      const info = document.getElementById(id + "-info");
+      info.classList.toggle("hidden");
+    }
+  </script>
+</body>
+</html>
