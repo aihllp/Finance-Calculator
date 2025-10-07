@@ -1,82 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Takaful Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Takaful Coverage Calculator</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+     @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.8s ease forwards; }
+    .animate-slideUp { animation: slideUp 1s ease forwards; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg">
-    <h1 class="text-2xl font-bold mb-6 text-center">Takaful Calculator</h1>
+<body class="bg-gradient-to-b from-sky-50 to-blue-100 min-h-screen flex flex-col items-center justify-center p-6">
 
-    <!-- Input Form -->
-    <div class="space-y-4">
-      <div>
-        <label class="block text-sm font-semibold">Age</label>
-        <input type="number" id="age" class="w-full p-2 border rounded-lg" placeholder="Enter age">
-      </div>
+  <!-- Header -->
+  <header class="text-center mb-6 animate-fadeIn">
+    <h1 class="text-3xl font-bold text-blue-700">Takaful Coverage Calculator</h1>
+    <p class="text-gray-600 mt-2">Discover your estimated coverage based on financial status</p>
+  </header>
 
-      <div>
-        <label class="block text-sm font-semibold">Coverage Amount (RM)</label>
-        <input type="number" id="coverage" class="w-full p-2 border rounded-lg" placeholder="e.g. 100000">
-      </div>
+  <!-- Coverage Options -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl mb-10">
+    <button id="oneYear" class="coverage-card bg-white rounded-2xl shadow-lg p-5 text-center hover:scale-105 transition-transform">
+      <h2 class="text-xl font-semibold text-blue-600">1-Year Coverage</h2>
+      <p class="text-gray-500 mt-2">Short-term coverage with flexible payment</p>
+    </button>
 
-      <div>
-        <label class="block text-sm font-semibold">Coverage Term</label>
-        <select id="term" class="w-full p-2 border rounded-lg">
-          <option value="1">1 Year</option>
-          <option value="5">5 Years</option>
-          <option value="10">10 Years</option>
-        </select>
-      </div>
+    <button id="fiveYear" class="coverage-card bg-white rounded-2xl shadow-lg p-5 text-center hover:scale-105 transition-transform">
+      <h2 class="text-xl font-semibold text-blue-600">5-Year Coverage</h2>
+      <p class="text-gray-500 mt-2">Medium-term coverage with better benefits</p>
+    </button>
 
-      <button onclick="calculateTakaful()" 
-              class="w-full bg-indigo-700 text-white py-2 rounded-lg hover:bg-indigo-800">
-        Calculate
-      </button>
-    </div>
-
-    <!-- Results -->
-    <div id="results" class="mt-6 hidden bg-gray-50 p-4 rounded-lg border">
-      <h2 class="text-lg font-semibold mb-2">Results</h2>
-      <p><span class="font-semibold">Yearly Premium:</span> RM<span id="yearly"></span></p>
-      <p><span class="font-semibold">Total Premium:</span> RM<span id="total"></span></p>
-    </div>
-
-    <!-- Back Button -->
-    <button onclick="window.location.href='index.html'" 
-            class="mt-6 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700">
-      ← Back to Cashflow Calculator
+    <button id="tenYear" class="coverage-card bg-white rounded-2xl shadow-lg p-5 text-center hover:scale-105 transition-transform">
+      <h2 class="text-xl font-semibold text-blue-600">10-Year Coverage</h2>
+      <p class="text-gray-500 mt-2">Long-term financial security for your family</p>
     </button>
   </div>
 
+  <!-- Result Section -->
+  <div id="resultSection" class="hidden w-full max-w-5xl bg-white rounded-2xl shadow-2xl p-8 animate-slideUp">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      
+      <!-- Left Column -->
+      <div class="text-left">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">Financial Summary</h3>
+        <p class="text-gray-700 text-lg">Monthly Salary: <span id="salaryText" class="font-semibold text-blue-600"></span></p>
+        <p class="text-gray-700 text-lg mt-2">Monthly Expenses: <span id="expensesText" class="font-semibold text-blue-600"></span></p>
+        <p class="text-gray-700 text-lg mt-2">Net Savings: <span id="netText" class="font-semibold text-blue-600"></span></p>
+      </div>
+
+      <!-- Right Column -->
+      <div class="text-center">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">Estimated Takaful Coverage</h3>
+        <p id="coverageText" class="text-3xl font-bold text-blue-600 mb-6">-</p>
+        <canvas id="coverageChart" class="mx-auto w-full max-w-xs"></canvas>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="mt-8 text-center">
+    <button onclick="window.location.href='index.html'" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">Back to Financial Calculator</button>
+  </div>
+
   <script>
-    function calculateTakaful() {
-      const age = parseInt(document.getElementById("age").value);
-      const coverage = parseFloat(document.getElementById("coverage").value);
-      const term = parseInt(document.getElementById("term").value);
+    // Hardcoded financial data (you can change these later or fetch dynamically)
+    const salary = 4000;
+    const expenses = 2500;
 
-      if (!age || !coverage || !term) {
-        alert("Please fill in all fields!");
-        return;
-      }
+    // Update displayed base data
+    document.getElementById('salaryText').textContent = `RM ${salary.toLocaleString()}`;
+    document.getElementById('expensesText').textContent = `RM ${expenses.toLocaleString()}`;
+    document.getElementById('netText').textContent = `RM ${(salary - expenses).toLocaleString()}`;
 
-      // 🔹 Example formula: Premium = coverage * (rate based on age) * 0.01
-      // Younger age = lower rate, older = higher
-      let rate;
-      if (age < 30) rate = 0.5;
-      else if (age < 40) rate = 0.8;
-      else if (age < 50) rate = 1.2;
-      else rate = 2.0;
+    // Function to show result
+    function showCoverage(plan) {
+      const netSavings = salary - expenses;
+      let multiplier = plan === "oneYear" ? 8 : plan === "fiveYear" ? 50 : 120;
+      const coverage = netSavings * multiplier;
 
-      const yearlyPremium = (coverage * rate * 0.01).toFixed(2);
-      const totalPremium = (yearlyPremium * term).toFixed(2);
+      // Update coverage result
+      document.getElementById('coverageText').textContent = `RM ${coverage.toLocaleString()}`;
 
-      document.getElementById("yearly").textContent = yearlyPremium;
-      document.getElementById("total").textContent = totalPremium;
-      document.getElementById("results").classList.remove("hidden");
+      // Reveal section
+      const result = document.getElementById('resultSection');
+      result.classList.remove('hidden');
+      result.scrollIntoView({ behavior: "smooth" });
+
+      // Chart setup
+      const ctx = document.getElementById('coverageChart').getContext('2d');
+      if (window.coverageChart) window.coverageChart.destroy();
+      window.coverageChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Net Savings', 'Estimated Coverage'],
+          datasets: [{
+            data: [netSavings, coverage],
+            backgroundColor: ['#93C5FD', '#2563EB'],
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          plugins: { legend: { display: true, position: 'bottom' } },
+        },
+      });
     }
+
+    // Add click events
+    document.querySelectorAll('.coverage-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.coverage-card').forEach(c => c.classList.remove('ring', 'ring-blue-400'));
+        card.classList.add('ring', 'ring-blue-400');
+        showCoverage(card.id);
+      });
+    });
   </script>
+
 </body>
 </html>

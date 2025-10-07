@@ -44,20 +44,33 @@ function calculate() {
   // Financial status calculations
   const cashflow = income - expenses;
   const networth = assets - liabilities;
-  const wealthratio = expenses === 0 ? Infinity : (networth / expenses);
+  const currentWealthRatio = expenses === 0 ? Infinity : (networth / expenses);
   const savingsratio = income === 0 ? 0 : ((income - expenses) / income) * 100;
   const liquidityratio = expenses === 0 ? Infinity : (assets / expenses);
   const debtServiceRatio = income === 0 ? 0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
 
+  showResultsSection();
+
   // Update UI
   document.getElementById("cashflow").textContent = formatRM(cashflow);
   document.getElementById("networth").textContent = formatRM(networth);
-  document.getElementById("wealthratio").textContent = wealthratio === Infinity ? "∞" : wealthratio.toFixed(2);
+  document.getElementById("wealthratio").textContent = currentWealthRatio === Infinity ? "∞" : currentWealthRatio.toFixed(2);
   document.getElementById("savingsratio").textContent = savingsratio.toFixed(2) + "%";
   document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ? "∞" : liquidityratio.toFixed(2);
   document.getElementById("debtServiceRatio").textContent = debtServiceRatio.toFixed(2) + "%";
 
+  // --- Update Financial Health ---
+  const healthScore = Math.min(((savingsratio / 100) * 40 + Math.min(liquidityratio, 10) * 3 + Math.max(0, (100 - debtServiceRatio)) * 0.5), 100);
+  document.getElementById("health").textContent = healthScore.toFixed(1) + "%";
+  const bar = document.getElementById("health-fill");
+  bar.style.transition = "width 0.7s ease-in-out";
+  bar.style.width = healthScore + "%";
+  bar.style.width = Math.max(healthScore, 5) + "%";
+
+  // --- Update gauge ---
+  wealthRatio = currentWealthRatio === Infinity ? 200 : parseFloat(currentWealthRatio); // ensure global value
   updateGaugeFromResult();
+  updateRatiosChart(savingsratio, liquidityratio, debtServiceRatio);
 }
 
 AOS.init({
@@ -69,6 +82,7 @@ AOS.init({
 const ctx = document.getElementById('healthGauge').getContext('2d');
 
 let wealthRatio = 0; // initial needle position
+let financialHealth = 0; // to track health percentage
 
 const data = {
       labels: [
@@ -158,17 +172,18 @@ const wealthGauge = new Chart(ctx, {
 // sync with calculation result
 function updateGaugeFromResult() {
   const ratioText = document.getElementById('wealthratio').innerText;
-  const targetValue = parseFloat(ratioText) || 0; // <- keep this name consistent
+  const targetValue = parseFloat(ratioText) || 0;
   const maxValue = 200;
 
-  // Clamp value
   const clampedTarget = Math.min(targetValue, maxValue);
+  const start = wealthRatio;
+  const end = clampedTarget;
+  wealthRatio = clampedTarget; // store the latest value
 
-  // Smooth animation
-  let start = wealthRatio;
-  let end = clampedTarget;
+  wealthGauge.update('none'); //force immediate refresh
+
   let startTime = null;
-  const duration = 800; // ms
+  const duration = 1200; // 1.2 second smooth animation
 
   function animateNeedle(timestamp) {
     if (!startTime) startTime = timestamp;
@@ -182,4 +197,81 @@ function updateGaugeFromResult() {
   }
 
   requestAnimationFrame(animateNeedle);
+}
+
+function createMiniChart(ctxId, label, userValue, benchmarkValue) {
+  const ctx = document.getElementById(ctxId).getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [label],
+      datasets: [
+        {
+          label: 'Your Result',
+          data: [userValue],
+          backgroundColor: '#6366f1',
+          borderRadius: 6,
+        },
+        {
+          label: 'Benchmark',
+          data: [benchmarkValue],
+          backgroundColor: '#a5b4fc',
+          borderRadius: 6,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { color: '#4b5563', font: { size: 11 } },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#f3f4f6' },
+          ticks: { color: '#6b7280', stepSize: 10 },
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: '#4b5563' },
+        },
+      },
+      animation: { duration: 1000, easing: 'easeOutQuart' },
+    },
+  });
+}
+
+// Example values — you can make these dynamic
+createMiniChart('savingsChart', 'Savings', 72.82, 10);
+createMiniChart('liquidityChart', 'Liquidity', 4.33, 3);
+createMiniChart('debtChart', 'Debt Service', 20.00, 35);
+
+
+function showResultsSection() {
+  const resultsSection = document.getElementById("resultsSection");
+  const takafulSection = document.getElementById("takafulButtonSection");
+
+  // reveal sections
+  [resultsSection, takafulSection].forEach(sec => {
+    sec.classList.remove("hidden", "opacity-0", "pointer-events-none");
+    sec.classList.add("opacity-100");
+  });
+
+  // smooth scroll to results section after a short delay (for fade effect)
+  setTimeout(() => {
+    resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 400); // wait for fade-in transition
+}
+
+// for terms page
+function toggleInfo(id) {
+  const info = document.getElementById(id + "-info");
+  const card = info.parentElement;
+
+  info.classList.toggle("show");
+  card.classList.toggle("active");
 }

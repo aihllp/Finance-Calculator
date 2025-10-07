@@ -2,9 +2,6 @@ html, body {
     height: 100%;
     scroll-behavior: smooth;
   }
-  background{
-    background-color: #8fa7d6;
-  }
   body {
     scroll-snap-type: y mandatory;
     overflow-y: scroll;
@@ -12,3 +9,38 @@ html, body {
   section {
     scroll-snap-align: center;
   }
+
+  /* for terms page */
+  .fade {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  overflow: hidden;
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+.fade.show {
+  max-height: 150px; /* enough space for your text */
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.term-card.active {
+  background: linear-gradient(to bottom right, #fffbe6, #fff);
+  border: 1px solid #facc15;
+  box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);
+}
+
+/* Smooth horizontal scroll */
+::-webkit-scrollbar {
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

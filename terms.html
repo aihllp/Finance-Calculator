@@ -4,76 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Learn Financial Terms</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 font-sans">
 
-  <!-- Header -->
-  <header class="bg-green-700 text-white py-4 text-center shadow">
-    <h1 class="text-xl font-bold">Learn the Financial Terms</h1>
-  </header>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 font-sans min-h-screen">
 
-  <!-- Section -->
   <main class="max-w-4xl mx-auto px-6 py-10">
-    <p class="text-gray-600 mb-10 text-center">
-      Tap on each term below to understand what it means and how it relates to your financial health.
-    </p>
+    <h1 class="text-2xl font-bold text-center">What are these terms?</h1>
+    <p class="text-sm text-gray-500 text-center mt-1 mb-10">Tap on each card to learn how it affects your financial health.</p>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      <!-- Card 1 -->
-      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('cashflow')">
-        <h3 class="font-semibold text-gray-800">Cashflow</h3>
-        <p id="cashflow-info" class="hidden text-gray-600 text-sm mt-2">
+    <!-- Grid of cards -->
+    <div class="flex gap-5 overflow-x-auto pb-4">
+      <!-- Card template -->
+      <div class="term-card bg-white shadow-md rounded-2xl p-6 cursor-pointer hover:shadow-lg hover:scale-[1.03] transition-all"
+           onclick="toggleInfo('cashflow')">
+        <h3 class="font-semibold text-gray-800 text-lg text-center">Cashflow</h3>
+        <p id="cashflow-info" class="fade text-gray-600 text-sm mt-3">
           Cashflow is the money moving in and out of your pocket. Positive cashflow means you’re earning more than you spend.
         </p>
       </div>
 
-      <!-- Card 2 -->
-      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('networth')">
-        <h3 class="font-semibold text-gray-800">Net Worth</h3>
-        <p id="networth-info" class="hidden text-gray-600 text-sm mt-2">
+      <div class="term-card bg-white shadow-md rounded-2xl p-6 cursor-pointer hover:shadow-lg hover:scale-[1.03] transition-all"
+           onclick="toggleInfo('networth')">
+        <h3 class="font-semibold text-gray-800 text-lg text-center">Net Worth</h3>
+        <p id="networth-info" class="fade text-gray-600 text-sm mt-3">
           Net worth is what you own (assets) minus what you owe (liabilities). A positive net worth means your assets exceed your debts.
         </p>
       </div>
 
-      <!-- Card 3 -->
-      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('savingsratio')">
-        <h3 class="font-semibold text-gray-800">Savings Ratio</h3>
-        <p id="savingsratio-info" class="hidden text-gray-600 text-sm mt-2">
+      <div class="term-card bg-white shadow-md rounded-2xl p-6 cursor-pointer hover:shadow-lg hover:scale-[1.03] transition-all"
+           onclick="toggleInfo('wealthRatio')">
+        <h3 class="font-semibold text-gray-800 text-lg text-center">Wealth Ratio</h3>
+        <p id="wealthRatio-info" class="fade text-gray-600 text-sm mt-3">
+          Wealth ratio compares your net worth to your income. A higher ratio indicates better financial health.
+        </p>
+      </div>
+
+      <div class="term-card bg-white shadow-md rounded-2xl p-6 cursor-pointer hover:shadow-lg hover:scale-[1.03] transition-all"
+           onclick="toggleInfo('savingsratio')">
+        <h3 class="font-semibold text-gray-800 text-lg text-center">Savings Ratio</h3>
+        <p id="savingsratio-info" class="fade text-gray-600 text-sm mt-3">
           Savings ratio shows how much of your income you save after expenses. The higher, the better for your financial stability.
         </p>
       </div>
 
-      <!-- Card 4 -->
-      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('liquidityratio')">
-        <h3 class="font-semibold text-gray-800">Liquidity Ratio</h3>
-        <p id="liquidityratio-info" class="hidden text-gray-600 text-sm mt-2">
+      <div class="term-card bg-white shadow-md rounded-2xl p-6 cursor-pointer hover:shadow-lg hover:scale-[1.03] transition-all"
+           onclick="toggleInfo('liquidityratio')">
+        <h3 class="font-semibold text-gray-800 text-lg text-center">Liquidity Ratio</h3>
+        <p id="liquidityratio-info" class="fade text-gray-600 text-sm mt-3">
           Liquidity ratio measures how easily you can cover expenses using your available assets.
         </p>
       </div>
 
-      <!-- Card 5 -->
-      <div class="term-card bg-white shadow rounded-2xl p-5 cursor-pointer transition hover:shadow-lg" onclick="toggleInfo('debtservice')">
-        <h3 class="font-semibold text-gray-800">Debt Service Ratio</h3>
-        <p id="debtservice-info" class="hidden text-gray-600 text-sm mt-2">
+      <div class="term-card bg-white shadow-md rounded-2xl p-6 cursor-pointer hover:shadow-lg hover:scale-[1.03] transition-all"
+           onclick="toggleInfo('debtservice')">
+        <h3 class="font-semibold text-gray-800 text-lg text-center">Debt Service Ratio</h3>
+        <p id="debtservice-info" class="fade text-gray-600 text-sm mt-3">
           Debt service ratio shows what portion of your income goes to repaying loans. Keep it below 40% for financial health.
         </p>
       </div>
     </div>
-
-    <!-- Back button -->
-    <div class="text-center mt-12">
-      <a href="index.html" class="inline-block bg-green-700 hover:bg-green-800 text-white py-3 px-6 rounded-full transition">
-        ← Back to Calculator
-      </a>
-    </div>
   </main>
 
-  <script>
-    function toggleInfo(id) {
-      const info = document.getElementById(id + "-info");
-      info.classList.toggle("hidden");
-    }
-  </script>
+  <script src="script.js"></script>
+
 </body>
 </html>
