@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-     @keyframes fadeIn {
+    @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
@@ -19,12 +19,13 @@
     .animate-slideUp { animation: slideUp 1s ease forwards; }
   </style>
 </head>
+
 <body class="bg-gradient-to-b from-sky-50 to-blue-100 min-h-screen flex flex-col items-center justify-center p-6">
 
   <!-- Header -->
   <header class="text-center mb-6 animate-fadeIn">
     <h1 class="text-3xl font-bold text-blue-700">Takaful Coverage Calculator</h1>
-    <p class="text-gray-600 mt-2">Discover your estimated coverage based on financial status</p>
+    <p class="text-gray-600 mt-2">Discover your estimated coverage based on your financial data</p>
   </header>
 
   <!-- Coverage Options -->
@@ -60,62 +61,99 @@
       <!-- Right Column -->
       <div class="text-center">
         <h3 class="text-2xl font-bold text-blue-700 mb-4">Estimated Takaful Coverage</h3>
-        <p id="coverageText" class="text-3xl font-bold text-blue-600 mb-6">-</p>
-        <canvas id="coverageChart" class="mx-auto w-full max-w-xs"></canvas>
-      </div>
 
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
+            <h4 class="text-lg font-semibold text-blue-700 mb-1">Based on Income</h4>
+            <p id="coverageIncome" class="text-2xl font-bold text-blue-600">-</p>
+          </div>
+
+          <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
+            <h4 class="text-lg font-semibold text-blue-700 mb-1">Based on Expenses</h4>
+            <p id="coverageExpenses" class="text-2xl font-bold text-blue-600">-</p>
+          </div>
+        </div>
+
+        <div class="flex justify-center">
+          <canvas id="coverageChart" class="max-w-[200px]"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Back Button -->
   <div class="mt-8 text-center">
-    <button onclick="window.location.href='index.html'" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">Back to Financial Calculator</button>
+    <button onclick="window.location.href='index.html'" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">
+      Back to Financial Calculator
+    </button>
   </div>
 
   <script>
-    // Hardcoded financial data (you can change these later or fetch dynamically)
-    const salary = 4000;
-    const expenses = 2500;
+    let salary = 0;
+    let expenses = 0;
 
-    // Update displayed base data
-    document.getElementById('salaryText').textContent = `RM ${salary.toLocaleString()}`;
-    document.getElementById('expensesText').textContent = `RM ${expenses.toLocaleString()}`;
-    document.getElementById('netText').textContent = `RM ${(salary - expenses).toLocaleString()}`;
+  // Load salary & expenses from localStorage
+  window.addEventListener('DOMContentLoaded', () => {
+  salary = Number(localStorage.getItem('totalSalary')) || 0;
+  expenses = Number(localStorage.getItem('totalExpenses')) || 0;
 
-    // Function to show result
+  // Display on page
+  document.getElementById('salaryText').textContent = salary > 0 
+    ? `RM ${salary.toLocaleString()}` 
+    : 'No data found';
+
+  document.getElementById('expensesText').textContent = expenses > 0 
+    ? `RM ${expenses.toLocaleString()}` 
+    : 'No data found';
+
+  document.getElementById('netText').textContent = (salary > 0 && expenses > 0)
+    ? `RM ${(salary - expenses).toLocaleString()}`
+    : 'No data found';
+});
+
     function showCoverage(plan) {
+      if (salary <= 0 || expenses <= 0) {
+        alert('No salary or expenses data found. Please calculate on the main page first.');
+        return;
+      }
+
       const netSavings = salary - expenses;
-      let multiplier = plan === "oneYear" ? 8 : plan === "fiveYear" ? 50 : 120;
-      const coverage = netSavings * multiplier;
+      let multiplier;
+      switch (plan) {
+        case "oneYear": multiplier = 8; break;
+        case "fiveYear": multiplier = 50; break;
+        case "tenYear": multiplier = 120; break;
+      }
 
-      // Update coverage result
-      document.getElementById('coverageText').textContent = `RM ${coverage.toLocaleString()}`;
+      const coverageIncome = salary * multiplier;
+      const coverageExpenses = expenses * multiplier;
 
-      // Reveal section
+      document.getElementById('coverageIncome').textContent = `RM ${coverageIncome.toLocaleString()}`;
+      document.getElementById('coverageExpenses').textContent = `RM ${coverageExpenses.toLocaleString()}`;
+
       const result = document.getElementById('resultSection');
       result.classList.remove('hidden');
       result.scrollIntoView({ behavior: "smooth" });
 
-      // Chart setup
       const ctx = document.getElementById('coverageChart').getContext('2d');
       if (window.coverageChart) window.coverageChart.destroy();
       window.coverageChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Net Savings', 'Estimated Coverage'],
+          labels: ['Income-based', 'Expenses-based'],
           datasets: [{
-            data: [netSavings, coverage],
-            backgroundColor: ['#93C5FD', '#2563EB'],
+            data: [coverageIncome, coverageExpenses],
+            backgroundColor: ['#3B82F6', '#93C5FD'],
             borderWidth: 1,
           }],
         },
         options: {
           plugins: { legend: { display: true, position: 'bottom' } },
+          layout: { padding: 10 },
         },
       });
     }
 
-    // Add click events
     document.querySelectorAll('.coverage-card').forEach(card => {
       card.addEventListener('click', () => {
         document.querySelectorAll('.coverage-card').forEach(c => c.classList.remove('ring', 'ring-blue-400'));
