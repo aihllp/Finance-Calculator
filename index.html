@@ -20,8 +20,24 @@
     }
     .animate-fadeIn { animation: fadeIn 0.8s ease forwards; }
     .animate-slideUp { animation: slideUp 1s ease forwards; }
-    /* small helper for takaful card selected ring */
+
+    /* Slide animation for takaful section (collapsed by default) */
+    #takafulSection {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.9s cubic-bezier(.2,.9,.2,1), opacity 0.6s ease;
+    }
+    #takafulSection.show {
+      max-height: 3000px; /* big enough to expand */
+      opacity: 1;
+    }
+
+    /* subtle card ring highlight */
     .coverage-card.ring { box-shadow: 0 0 0 4px rgba(59,130,246,0.18); }
+
+    /* small visual polish for the takaful card container */
+    .takaful-card { border-radius: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -59,6 +75,7 @@
           </div>
         </div>
       </div>
+
       <!-- Expenses Card -->
       <div data-aos="fade-up" data-aos-delay="100">
         <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20">
@@ -105,6 +122,7 @@
           </div>
         </div>
       </div>
+
       <!-- Assets Card -->
       <div data-aos="fade-up" data-aos-delay="100">
         <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20">
@@ -141,6 +159,7 @@
           </div>
         </div>
       </div>
+
       <!-- Liabilities Card -->
       <div data-aos="fade-up" data-aos-delay="100">
         <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20">
@@ -231,6 +250,7 @@
             </div>
           </div>
         </div>
+
         <!-- Ratios + Charts -->
         <div class="mt-12 bg-white rounded-2xl shadow-lg p-8">
           <h3 class="text-xl font-semibold mb-6 text-center">Financial Ratios Overview</h3>
@@ -266,6 +286,7 @@
             </div>
           </div>
         </div>
+
         <!-- Financial Health -->
         <div class="mt-12 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-2xl shadow-lg p-4 max-w-3xl mx-auto text-center">
           <h3 class="text-xl font-semibold mb-6 text-yellow-700">Financial Health Overview</h3>
@@ -278,83 +299,85 @@
             <canvas id="healthGauge" class="w-full max-w-xs"></canvas>
           </div>
         </div>
+
+        <!-- Proceed Button -->
         <div class="mt-8 text-center">
           <button id="showTakafulBtn" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">
             Proceed to Takaful Calculator
           </button>
         </div>
-      </div>
-    </div>
 
-    <!-- 🌙 Hidden Takaful Section -->
-    <div id="takafulSection" class="hidden opacity-0 transition-all duration-700 ease-in-out mt-16">
-      <div class="bg-gradient-to-b from-sky-50 to-blue-100 min-h-screen flex flex-col items-center justify-center p-6 rounded-2xl">
-        
-        <!-- Header -->
-        <header class="text-center mb-6 animate-fadeIn">
-          <h1 class="text-3xl font-bold text-blue-700">Takaful Coverage Calculator</h1>
-          <p class="text-gray-600 mt-2">Discover your estimated coverage based on your financial data</p>
-        </header>
+        <!-- === Takaful Section (moved here, hidden by default, slide-down) === -->
+        <div id="takafulSection" class="mt-8">
+          <div class="bg-white takaful-card p-8">
+            <!-- Header -->
+            <header class="text-center mb-8 animate-fadeIn">
+              <h1 class="text-3xl font-bold text-blue-700">Takaful Coverage Calculator</h1>
+              <p class="text-gray-600 mt-2">Discover your estimated coverage based on your financial data</p>
+            </header>
 
-        <!-- Coverage Options -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl mb-10">
-          <button id="oneYear" class="coverage-card bg-white rounded-2xl shadow-lg p-5 text-center hover:scale-105 transition-transform">
-            <h2 class="text-xl font-semibold text-blue-600">1-Year Coverage</h2>
-            <p class="text-gray-500 mt-2">Short-term coverage with flexible payment</p>
-          </button>
-          <button id="fiveYear" class="coverage-card bg-white rounded-2xl shadow-lg p-5 text-center hover:scale-105 transition-transform">
-            <h2 class="text-xl font-semibold text-blue-600">5-Year Coverage</h2>
-            <p class="text-gray-500 mt-2">Medium-term coverage with better benefits</p>
-          </button>
-          <button id="tenYear" class="coverage-card bg-white rounded-2xl shadow-lg p-5 text-center hover:scale-105 transition-transform">
-            <h2 class="text-xl font-semibold text-blue-600">10-Year Coverage</h2>
-            <p class="text-gray-500 mt-2">Long-term financial security for your family</p>
-          </button>
-        </div>
-
-        <!-- Result Section -->
-        <div id="resultSectionTakaful" class="hidden w-full max-w-5xl bg-white rounded-2xl shadow-2xl p-8 animate-slideUp">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            
-            <!-- Left Column -->
-            <div class="text-left">
-              <h3 class="text-2xl font-bold text-blue-700 mb-4">Financial Summary</h3>
-              <p class="text-gray-700 text-lg">Monthly Salary: <span id="salaryText" class="font-semibold text-blue-600"></span></p>
-              <p class="text-gray-700 text-lg mt-2">Monthly Expenses: <span id="expensesText" class="font-semibold text-blue-600"></span></p>
-              <p class="text-gray-700 text-lg mt-2">Net Savings: <span id="netText" class="font-semibold text-blue-600"></span></p>
+            <!-- Coverage Options -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl mx-auto mb-10">
+              <button id="oneYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform">
+                <h2 class="text-xl font-semibold text-blue-600">1-Year Coverage</h2>
+                <p class="text-gray-500 mt-2">Short-term coverage with flexible payment</p>
+              </button>
+              <button id="fiveYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform">
+                <h2 class="text-xl font-semibold text-blue-600">5-Year Coverage</h2>
+                <p class="text-gray-500 mt-2">Medium-term coverage with better benefits</p>
+              </button>
+              <button id="tenYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform">
+                <h2 class="text-xl font-semibold text-blue-600">10-Year Coverage</h2>
+                <p class="text-gray-500 mt-2">Long-term financial security for your family</p>
+              </button>
             </div>
 
-            <!-- Right Column -->
-            <div class="text-center">
-              <h3 class="text-2xl font-bold text-blue-700 mb-4">Estimated Takaful Coverage</h3>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
-                  <h4 class="text-lg font-semibold text-blue-700 mb-1">Based on Income</h4>
-                  <p id="coverageIncome" class="text-2xl font-bold text-blue-600">-</p>
+            <!-- Result Section -->
+            <div id="resultSectionTakaful" class="hidden w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-inner p-8 animate-slideUp">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Left -->
+                <div class="text-left">
+                  <h3 class="text-2xl font-bold text-blue-700 mb-4">Financial Summary</h3>
+                  <p class="text-gray-700 text-lg">Monthly Salary: <span id="salaryText" class="font-semibold text-blue-600"></span></p>
+                  <p class="text-gray-700 text-lg mt-2">Monthly Expenses: <span id="expensesText" class="font-semibold text-blue-600"></span></p>
+                  <p class="text-gray-700 text-lg mt-2">Net Savings: <span id="netText" class="font-semibold text-blue-600"></span></p>
                 </div>
-                <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
-                  <h4 class="text-lg font-semibold text-blue-700 mb-1">Based on Expenses</h4>
-                  <p id="coverageExpenses" class="text-2xl font-bold text-blue-600">-</p>
+
+                <!-- Right -->
+                <div class="text-center">
+                  <h3 class="text-2xl font-bold text-blue-700 mb-4">Estimated Takaful Coverage</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
+                      <h4 class="text-lg font-semibold text-blue-700 mb-1">Based on Income</h4>
+                      <p id="coverageIncome" class="text-2xl font-bold text-blue-600">-</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
+                      <h4 class="text-lg font-semibold text-blue-700 mb-1">Based on Expenses</h4>
+                      <p id="coverageExpenses" class="text-2xl font-bold text-blue-600">-</p>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-center">
+                    <canvas id="coverageChart" class="max-w-[200px]"></canvas>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div class="flex justify-center">
-                <canvas id="coverageChart" class="max-w-[200px]"></canvas>
-              </div>
+            <!-- Back Button -->
+            <div class="mt-8 text-center">
+              <button id="backToMain" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">
+                Back to Financial Calculator
+              </button>
             </div>
           </div>
         </div>
+        <!-- === END Takaful Section === -->
 
-        <!-- Back Button -->
-        <div class="mt-8 text-center">
-          <button id="backToMain" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">
-            Back to Financial Calculator
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+      </div> <!-- end resultsSection -->
+    </div> <!-- end space-y-10 -->
+  </div> <!-- end container -->
+
   <script>
     // Format helper
     function formatRM(n) {
@@ -423,13 +446,14 @@
       updateGaugeFromResult();
       updateRatiosChart(savingsratio, liquidityratio, debtServiceRatio);
 
-      // Save key values for Takaful page (fixed: save computed income & expenses)
+      // Save key values for Takaful page
       localStorage.setItem('totalSalary', String(income));
       localStorage.setItem('totalExpenses', String(expenses));
     }
 
     // Gauge plugin for needle
-    const ctxGauge = document.getElementById('healthGauge')?.getContext && document.getElementById('healthGauge')?.getContext('2d');
+    const healthGaugeEl = document.getElementById('healthGauge');
+    const ctxGauge = healthGaugeEl ? healthGaugeEl.getContext('2d') : null;
     const gaugeColors = [
       '#ff0000', '#ff9900', '#cccc00', '#66cc00',
       '#00cc66', '#0099cc', '#9933cc', '#000000'
@@ -445,6 +469,7 @@
       afterDatasetDraw(chart) {
         const { ctx } = chart;
         const meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data || !meta.data[0]) return;
         const xCoor = meta.data[0].x;
         const yCoor = meta.data[0].y;
         const outerRadius = meta.data[0].outerRadius;
@@ -609,12 +634,11 @@
 
     function showResultsSection() {
       const resultsSection = document.getElementById("resultsSection");
-      // optional: if you have a separate place for the takaful proceed button, you can add it here
       if (resultsSection) {
         resultsSection.classList.remove("hidden", "opacity-0", "pointer-events-none");
         resultsSection.classList.add("opacity-100");
         setTimeout(() => {
-          try { resultsSection.scrollIntoView({ behavior: "smooth", block: "start" }); } catch(e) {}
+          try { resultsSection.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
         }, 400);
       }
     }
@@ -637,39 +661,32 @@
 
       if (showTakafulBtn && takafulSection) {
         showTakafulBtn.addEventListener('click', function () {
-          // Display the takaful section
-          takafulSection.classList.remove('hidden');
-          // Animate opacity for fade-in effect
+          // Expand (slide down) the takaful area
+          takafulSection.classList.add('show');
+          // Auto-scroll after a small delay so expansion starts
           setTimeout(() => {
-            takafulSection.classList.add('opacity-100');
-            takafulSection.classList.remove('opacity-0');
-            // Scroll into view smoothly
+            // keep the Proceed button visible (we do not hide it)
             takafulSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 50); // Opacity transition delay
+          }, 420);
 
-          // Load data for Takaful display
+          // Load stored data
           const salary = Number(localStorage.getItem('totalSalary')) || 0;
           const expenses = Number(localStorage.getItem('totalExpenses')) || 0;
           document.getElementById('salaryText').textContent = salary > 0 ? `RM ${salary.toLocaleString()}` : 'No data found';
           document.getElementById('expensesText').textContent = expenses > 0 ? `RM ${expenses.toLocaleString()}` : 'No data found';
-          if (salary > 0 && expenses > 0) {
-            document.getElementById('netText').textContent = `RM ${(salary - expenses).toLocaleString()}`;
-          } else {
-            document.getElementById('netText').textContent = 'No data found';
-          }
+          document.getElementById('netText').textContent = (salary > 0 && expenses > 0) ? `RM ${(salary - expenses).toLocaleString()}` : 'No data found';
         });
       }
 
-      // Hide takaful section when going back AND scroll to resultsSection
+      // Collapse takaful section when going back and scroll to results
       if (backToMain) {
         backToMain.addEventListener('click', () => {
           if (!takafulSection) return;
-          takafulSection.classList.add('opacity-0');
+          takafulSection.classList.remove('show');
           setTimeout(() => {
-            takafulSection.classList.add('hidden');
             const resultsSection = document.getElementById('resultsSection');
             if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 400);
+          }, 420);
         });
       }
 
@@ -734,7 +751,7 @@
 
       const result = document.getElementById('resultSectionTakaful');
       result.classList.remove('hidden');
-      result.scrollIntoView({ behavior: "smooth" });
+      result.scrollIntoView({ behavior: "smooth", block: "center" });
 
       const ctx = document.getElementById('coverageChart').getContext('2d');
       if (window.coverageChart) window.coverageChart.destroy();
