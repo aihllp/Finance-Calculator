@@ -700,29 +700,14 @@
       });
     });
 
-    // Retrieve stored data on page load and show results if available
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedSalary = parseFloat(localStorage.getItem('totalSalary')) || 0;
-      const savedExpenses = parseFloat(localStorage.getItem('totalExpenses')) || 0;
-
-      if (savedSalary || savedExpenses) {
-        // show results section
-        const rs = document.getElementById('resultsSection');
-        if (rs) {
-          rs.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-          rs.classList.add('opacity-100');
-        }
-
-        // set values (safe)
-        if (document.getElementById('totalIncome')) document.getElementById('totalIncome').textContent = formatRM(savedSalary);
-        if (document.getElementById('totalExpenses')) document.getElementById('totalExpenses').textContent = formatRM(savedExpenses);
-        if (document.getElementById('cashflow')) document.getElementById('cashflow').textContent = formatRM(savedSalary - savedExpenses);
-
-        // ensure values are stored as strings (consistent)
-        localStorage.setItem('totalSalary', String(savedSalary));
-        localStorage.setItem('totalExpenses', String(savedExpenses));
-      }
-    });
+    //Always start hidden
+window.addEventListener('DOMContentLoaded', () => {
+  const resultsSection = document.getElementById('resultsSection');
+  if (resultsSection) {
+    resultsSection.classList.add('hidden', 'opacity-0', 'pointer-events-none');
+    resultsSection.classList.remove('opacity-100');
+  }
+});
 
     // Takaful coverage calculation + chart
     function showCoverage(plan) {
