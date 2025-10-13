@@ -1,3 +1,4 @@
+
 // Format helper
     function formatRM(n) {
       if (!isFinite(Number(n))) return "∞";
@@ -33,18 +34,6 @@
       const expenses = creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment + personalHouseholdExpenses + insuranceExpenses + otherExpenses;
       const assets = savings + propertyValue + investmentsValue + retirementFund;
       const liabilities = creditCardBalance + vehicleLoanBalance + propertyFinancingBalance + otherLiabilities;
-
-      if (income === 0 && expenses === 0) {
-        alert("Please enter your income and expenses before calculating.");
-        localStorage.removeItem('totalSalary');
-        localStorage.removeItem('totalExpenses');
-        document.getElementById("totalIncome").textContent = "RM 0.00";
-        document.getElementById("totalExpenses").textContent = "RM 0.00";
-        document.getElementById("salaryText").textContent = "No data found";
-        document.getElementById("expensesText").textContent = "No data found";
-        document.getElementById("netText").textContent = "No data found";
-        return; // Stop calculation here
-      }
 
       document.getElementById("totalIncome").textContent = formatRM(income);
       document.getElementById("totalExpenses").textContent = formatRM(expenses);
@@ -119,6 +108,11 @@
       document.getElementById('salaryText').textContent = formatRM(income);
       document.getElementById('expensesText').textContent = formatRM(expenses);
       document.getElementById('netText').textContent = formatRM(income - expenses);
+
+      if (income === 0 && expenses === 0) {
+        localStorage.removeItem('totalSalary');
+        localStorage.removeItem('totalExpenses');
+      }
     }
 
     // Gauge plugin for needle
@@ -422,10 +416,4 @@
           //layout: { padding: 10 },
         //},
       //});
-
-      // 🧹 Clear saved data whenever the page is refreshed
-      window.addEventListener('beforeunload', () => {
-        localStorage.removeItem('totalSalary');
-        localStorage.removeItem('totalExpenses');
-      });
     }
