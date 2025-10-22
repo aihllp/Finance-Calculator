@@ -372,10 +372,10 @@ function showCoverage(plan) {
   const netSavings = salary - expenses;
   let multiplier;
   switch (plan) {
-    case "oneYear": multiplier = 8; break;
-    case "fiveYear": multiplier = 50; break;
+    case "oneYear": multiplier = 12; break;
+    case "fiveYear": multiplier = 60; break;
     case "tenYear": multiplier = 120; break;
-    default: multiplier = 8;
+    default: multiplier = 12;
   }
 
   const coverageIncome = salary * multiplier;
