@@ -59,7 +59,7 @@ body {
   font-size: 1.3rem;
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .card-description {
@@ -78,7 +78,8 @@ body {
   opacity: 1;
   margin-top: 12px;
 }
-/* Responsive design */
+
+/* responsive design */
 @media (max-width: 1000px) {
   .cards-container { max-width: 750px; }
 }
@@ -94,32 +95,40 @@ body {
 }
 
 @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fadeIn { animation: fadeIn 0.8s ease forwards; }
-    .animate-slideUp { animation: slideUp 1s ease forwards; }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+    
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    /* Slide animation for takaful section (collapsed by default) */
-    #takafulSection {
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: max-height 0.9s cubic-bezier(.2,.9,.2,1), opacity 0.6s ease;
-    }
-    #takafulSection.show {
-      max-height: 3000px; /* big enough to expand */
-      opacity: 1;
-    }
+.animate-fadeIn { animation: fadeIn 0.8s ease forwards; }
+.animate-slideUp { animation: slideUp 1s ease forwards; }
 
-    /* subtle card ring highlight */
-    .coverage-card.ring { box-shadow: 0 0 0 4px rgba(59,130,246,0.18); }
+/*slide animation for takaful section (collapsed by default)*/
+#takafulSection {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.9s cubic-bezier(.2,.9,.2,1), opacity 0.6s ease;
+}
+    
+#takafulSection.show {
+  max-height: 3000px; /* big enough to expand */
+  opacity: 1;
+}
 
-    /* small visual polish for the takaful card container */
-    .takaful-card { border-radius: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); }
+/* subtle card ring highlight */
+.coverage-card.ring { box-shadow: 0 0 0 4px rgba(59,130,246,0.18); }
 
-  
+/* small visual polish for the takaful card container */
+.takaful-card { border-radius: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); }
+
+/*hide arrows in number input fields*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
