@@ -132,3 +132,68 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/* --- GLOBAL FIX FOR MOBILE CROPPING INSIDE IFRAME --- */
+
+/* Prevent any child element from overflowing horizontally */
+html, body {
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Force all Tailwind width classes to respect screen size */
+* {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix grids that cause overflow on small screens */
+.grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Fix canvas charts that overflow */
+canvas {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Fix very wide cards caused by long padding */
+.card,
+.coverage-card,
+.rounded-2xl,
+.shadow-lg,
+.shadow,
+.p-8,
+.p-6 {
+  max-width: 100% !important;
+}
+
+/* Fix long text inside flex rows */
+.flex {
+  flex-wrap: wrap !important;
+}
+
+/* Fix tables / paired labels + inputs */
+label {
+  max-width: 100% !important;
+  display: block !important;
+}
+
+/* Inputs that overflow on small phones */
+input, select {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Fix AOS animations pushing elements outside */
+[data-aos] {
+  transform: none !important;
+}
+
+/* Prevent any element from going beyond screen */
+div, section {
+  overflow-x: hidden !important;
+}
