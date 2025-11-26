@@ -17,8 +17,6 @@ function unformatNumber(value) {
 }
 
 /**
- * Helper function to safely retrieve numeric input values,
- * handling commas, "RM" prefix, converting percentages to decimals, and providing a default of 0.
  * @param {string} id - The element ID.
  * @param {boolean} isPercentage - Whether the input should be divided by 100.
  * @returns {number} The cleaned numeric value.
@@ -30,12 +28,9 @@ function getNumericValue(id, isPercentage = false) {
 
     let value = element.value || element.placeholder || '0';
     
-    // If it's a .num-input field, we use its custom raw value method
     if (typeof element.getRawValue === 'function') {
-        // Use the raw value if available (it handles unformatting commas)
         value = element.getRawValue();
-    } else {
-        // Standard cleanup for other number inputs or read-only fields
+    } else {  
         value = unformatNumber(value); 
     }
 
@@ -52,14 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   inputs.forEach(input => {
 
-    // FORMAT WHILE TYPING
     input.addEventListener("input", (e) => {
       let raw = unformatNumber(e.target.value);
 
-      // allow only numbers
       raw = raw.replace(/\D/g, "");
 
-      // apply comma formatting
       e.target.value = formatNumberWithComma(raw);
     });
 
@@ -399,13 +391,11 @@ function showCoverage(plan) {
   localStorage.setItem("takafulCoverageIncome", String(coverageIncome));
   localStorage.setItem("takafulCoverageExpenses", String(coverageExpenses));
 
-  // Also set a convenience key "takafulResult" to the currently displayed value (default: expenses)
-  // NOTE: TNA will compute final lifeProtection based on the dropdown; this is just a convenience.
   const defaultSelected = "expenses";
   const displayedValue = defaultSelected === "income" ? coverageIncome : coverageExpenses;
   localStorage.setItem("takafulResult", String(displayedValue));
-  localStorage.setItem("takafulPlan", plan); // store plan name (oneYear/fiveYear/tenYear)
-  localStorage.setItem("lifeProtection", String(displayedValue)); // Ensure TNA base protection is updated
+  localStorage.setItem("takafulPlan", plan);
+  localStorage.setItem("lifeProtection", String(displayedValue));
 
   // animate display
   const result = document.getElementById('resultSectionTakaful');
@@ -415,7 +405,6 @@ function showCoverage(plan) {
   }
 }
 
-// Function that was partially in DOMContentLoaded - centralized here for re-use
 function updateLifeProtectionFromBase(selectedBase) {
   // read stored values
   const storedIncome = parseFloat(localStorage.getItem("totalSalary") || localStorage.getItem("monthlyIncome") || "0") || 0;
@@ -427,7 +416,7 @@ function updateLifeProtectionFromBase(selectedBase) {
   const retrievedValue = document.getElementById("retrievedValue");
 
   let coverage = 0;
-  // prefer explicit stored coverage amounts (from index) if present, else compute from stored income/expenses (defaulting to 10 years if original plan is unknown)
+  
   if (selectedBase === "income") {
     coverage = takafulCoverageIncome > 0 ? takafulCoverageIncome : (storedIncome * 12 * 10);
   } else {
@@ -440,57 +429,42 @@ function updateLifeProtectionFromBase(selectedBase) {
     retrievedValue.classList.remove("hidden");
   }
 
-  // persist the chosen base and computed coverage
   localStorage.setItem("takafulBase", selectedBase);
   localStorage.setItem("takafulResult", String(coverage));
   localStorage.setItem("lifeProtection", String(coverage));
 }
 
 function initializeTNAData() {
-    // 1. Retrieve the latest values from localStorage
     const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
     const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0;
     
-    // 2. Get references to TNA elements
     const protectionType = document.getElementById("protectionType");
     const existingLiabilitiesInput = document.getElementById("existingLiabilities");
-    // *** FIX: Changed from 'totalAssets' to 'tnaTotalAssetsInput' ***
     const assetFieldDisplay = document.getElementById("tnaTotalAssetsInput"); 
     
-    // 3. Update Liabilities Input (It's a num-input, format with commas but NO "RM")
     if (existingLiabilitiesInput) {
-        // We use toLocaleString() for display with commas
         existingLiabilitiesInput.value = storedLiabilities ? Number(storedLiabilities).toLocaleString() : "";
     }
 
-    // 4. Update Assets Display (Read-only input field, format with "RM")
     if (assetFieldDisplay) {
-        // Assets are read-only and need the RM currency format
         assetFieldDisplay.value = formatRM(storedAssets);
     }
 
-    // 5. Update Dropdown and Life Protection
     if (protectionType) {
         const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
         const prevBase = localStorage.getItem("takafulBase") || ""; 
         
-        // Set dropdown value (either previously saved base or default to 'expenses')
         if (prevBase === "income" || prevBase === "expenses") {
             protectionType.value = prevBase;
         } else {
             protectionType.value = takafulCoverageExpenses > 0 ? "expenses" : "income";
         }
 
-        // Calculate/display the life protection based on the selected base
         updateLifeProtectionFromBase(protectionType.value);
     }
 }
 
-/**
- * Initializes the read-only fields on the retirement tab using saved financial data.
- */
 function initializeRetirementData() {
-    // Current Salary (PV for Projected Annual Expenses)
     const storedSalary = parseFloat(localStorage.getItem("totalSalary") || "0") || 0;
     // Existing Retirement Fund (PV3 for EPF1 projection)
     const storedRetirementFund = parseFloat(localStorage.getItem("mainRetirementFundValue") || "0") || 0; 
@@ -512,7 +486,6 @@ function initializeRetirementData() {
     
     // Populate Total Existing Retirement Fund (PV3)
     if (fundInput) {
-        // Display with comma formatting, without RM for easier parsing
         fundInput.value = storedRetirementFund ? Number(storedRetirementFund).toLocaleString('en-MY', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : "";
     }
 }
@@ -531,7 +504,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //tna calculation
 function calculateNeeds() {
-  // get lifeProtection from the lifeProtection input or fallback to localStorage
   let lifeProtRaw = document.getElementById("lifeProtection").value || localStorage.getItem("lifeProtection") || "0";
   const lifeProt = parseFloat(String(lifeProtRaw).replace(/,/g, "")) || 0;
 
@@ -544,8 +516,6 @@ function calculateNeeds() {
 
   const totalNeeds = lifeProt + liabilities + education;
   const totalAssetsCoverage = totalAssets + life;
-  
-  // Calculate remainingGap: Positive if Shortfall (Needs > Assets), Negative if Surplus (Assets > Needs)
   const remainingGap = totalNeeds - totalAssetsCoverage;
 
   const absGap = Math.abs(remainingGap);
@@ -555,29 +525,23 @@ function calculateNeeds() {
   document.getElementById("totalNeeds").textContent = "RM " + Number(totalNeeds).toLocaleString();
   document.getElementById("totalAssetsCoverage").textContent = "RM " + Number(totalAssetsCoverage).toLocaleString();
   
-  // 1. Display the absolute value
   resultElement.textContent = "RM " + Number(absGap).toLocaleString();
 
-  // 2. Clear existing color classes
   resultElement.classList.remove('text-yellow-600', 'text-red-600', 'text-green-600', 'text-blue-600');
 
   let statusMessage = '';
   
   if (remainingGap > 0) {
-    // Shortfall
     resultElement.classList.add('text-red-600');
     statusMessage = `You have a financial **shortfall** of RM ${Number(absGap).toLocaleString()}. Consider increasing your coverage.`;
   } else if (remainingGap < 0) {
-    // Surplus
     resultElement.classList.add('text-green-600');
     statusMessage = `You have a financial **surplus** of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
   } else {
-    // Balanced
     resultElement.classList.add('text-blue-600');
     statusMessage = `Your needs and coverage are perfectly balanced!`;
   }
   
-  // 3. Update the message
   document.getElementById("gapMessage").innerText = statusMessage;
 }
 
