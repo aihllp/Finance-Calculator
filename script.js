@@ -25,17 +25,15 @@ function unformatNumber(value) {
 function getNumericValue(id, isPercentage = false) {
     const element = document.getElementById(id);
     if (!element) return 0;
-
     let value = element.value || element.placeholder || '0';
     
     if (typeof element.getRawValue === 'function') {
         value = element.getRawValue();
     } else {  
-        value = unformatNumber(value); 
+        value = unformatNumber(value);
     }
 
     let num = parseFloat(value) || 0;
-
     if (isPercentage) {
         num = num / 100;
     }
@@ -60,22 +58,18 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 });
-
 // Chart instances
 let savingsChartInstance = null;
 let liquidityChartInstance = null;
 let debtChartInstance = null;
 let wealthRatio = 0;
-
 //store salary/expenses in memory instead of localStorage
 let totalSalary = 0;
 let totalExpenses = 0;
-
 // Main calculate function
 function calculate() {
   const salary = document.getElementById("salary").getRawValue() || 0;
   const otherIncome = document.getElementById("otherIncome").getRawValue() || 0;
-
   const creditCardRepayment = document.getElementById("creditCardRepayment").getRawValue() || 0;
   const vehicleLoanRepayment = document.getElementById("vehicleLoanRepayment").getRawValue() || 0;
   const propertyLoanRepayment = document.getElementById("propertyLoanRepayment").getRawValue() || 0;
@@ -95,7 +89,6 @@ function calculate() {
   const expenses = creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment + personalHouseholdExpenses + insuranceExpenses + otherExpenses;
   const assets = savings + propertyValue + investmentsValue + retirementFund;
   const liabilities = creditCardBalance + vehicleLoanBalance + propertyFinancingBalance + otherLiabilities;
-
   document.getElementById("totalIncome").textContent = formatRM(income);
   document.getElementById("totalExpenses").textContent = formatRM(expenses);
   document.getElementById("totalAssets").textContent = formatRM(assets);
@@ -106,7 +99,8 @@ function calculate() {
   const currentWealthRatio = expenses === 0 ? Infinity : (networth / expenses);
   const savingsratio = income === 0 ? 0 : ((income - expenses) / income) * 100;
   const liquidityratio = expenses === 0 ? Infinity : (savings / expenses);
-  const debtServiceRatio = income === 0 ? 0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
+  const debtServiceRatio = income === 0 ?
+  0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
 
   showResultsSection();
 
@@ -114,15 +108,16 @@ function calculate() {
   document.getElementById("networth").textContent = formatRM(networth);
   document.getElementById("wealthratio").textContent = currentWealthRatio === Infinity ? "∞" : currentWealthRatio.toFixed(2);
   document.getElementById("savingsratio").textContent = savingsratio.toFixed(2) + "%";
-  document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ? "∞" : liquidityratio.toFixed(2);
+  document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ?
+  "∞" : liquidityratio.toFixed(2);
   document.getElementById("debtServiceRatio").textContent = debtServiceRatio.toFixed(2) + "%";
 
   // Determine health label based on Wealth Ratio
-  wealthRatio = currentWealthRatio === Infinity ? 200 : Math.max(0, Math.min(currentWealthRatio, 200));
+  wealthRatio = currentWealthRatio === Infinity ?
+  200 : Math.max(0, Math.min(currentWealthRatio, 200));
 
   let healthText = "";
   let barColor = "#facc15";
-
   if (wealthRatio < 1) {
     healthText = "Bankrupt!";
     barColor = "#dc2626";
@@ -162,7 +157,8 @@ function calculate() {
   localStorage.setItem("totalExpenses", expenses);
   localStorage.setItem("totalLiabilities", liabilities);
   localStorage.setItem("totalAssets", assets);
-
+  // FIX: Store the retirement fund value so the retirement tab can retrieve it.
+  localStorage.setItem("retirementFundValue", retirementFund); 
   //update takaful
   document.getElementById('salaryText').textContent = formatRM(income);
   document.getElementById('expensesText').textContent = formatRM(expenses);
@@ -189,7 +185,8 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("totalAssets").textContent = formatRM(savedAssets);
   }
 
-  if (savedLiabilities > 0) {
+  if (savedLiabilities > 0) 
+  {
     document.getElementById("totalLiabilities").textContent = formatRM(savedLiabilities);
   }
 });
@@ -205,12 +202,11 @@ function updateRatiosChart(savingsRatio, liquidityRatio, debtServiceRatio) {
   const debtElem = document.getElementById("debtServiceRatio");
 
   if (savingsElem) savingsElem.style.color = savingsRatio >= savingsBenchmark ? "#16a34a" : "#dc2626";
-
   const liquidityValue = liquidityRatio === Infinity ? 200 : liquidityRatio;
-  if (liquidityElem) liquidityElem.style.color = liquidityValue >= liquidityBenchmark ? "#16a34a" : "#dc2626";
+  if (liquidityElem) liquidityElem.style.color = liquidityValue >= liquidityBenchmark ?
+  "#16a34a" : "#dc2626";
 
   if (debtElem) debtElem.style.color = debtServiceRatio <= debtBenchmark ? "#16a34a" : "#dc2626";
-
   //destroy previous chart if exists
   if (savingsChartInstance) savingsChartInstance.destroy();
   if (liquidityChartInstance) liquidityChartInstance.destroy();
@@ -231,14 +227,17 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
 
   // Identify which ratio this chart is for
   const isDebtService = label.toLowerCase().includes("debt");
-
   if (isDebtService) {
-    if (userValue < benchmarkValue) resultColor = "#16a34a"; // green
-    else if (userValue === benchmarkValue) resultColor = "#facc15"; // yellow
+    if (userValue < benchmarkValue) resultColor = "#16a34a";
+  // green
+    else if (userValue === benchmarkValue) resultColor = "#facc15";
+  // yellow
     else resultColor = "#dc2626"; // red
   } else {
-    if (userValue > benchmarkValue) resultColor = "#16a34a"; // green
-    else if (userValue === benchmarkValue) resultColor = "#facc15"; // yellow
+    if (userValue > benchmarkValue) resultColor = "#16a34a";
+  // green
+    else if (userValue === benchmarkValue) resultColor = "#facc15";
+  // yellow
     else resultColor = "#dc2626"; // red
   }
 
@@ -252,7 +251,8 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
           data: [benchmarkValue],
           backgroundColor: "#3B82F6",
           borderRadius: 6,
-        },
+       
+  },
         {
           label: "Your Result",
           data: [userValue],
@@ -264,7 +264,8 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
     options: {
       responsive: true,
       plugins: {
-        legend: {
+        legend: 
+  {
           display: true,
           position: "bottom",
           labels: { color: "#4b5563", font: { size: 11 } },
@@ -274,6 +275,7 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
         x: {
           grid: { display: false },
           ticks: { color: "#4b5563" },
+ 
           categoryPercentage: 0.5,
           barPercentage: 0.6,
         },
@@ -283,7 +285,8 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
           ticks: { color: "#6b7280" },
         },
       },
-      animation: { duration: 900, easing: "easeOutQuart" },
+      animation: { duration: 
+  900, easing: "easeOutQuart" },
     },
   });
 }
@@ -303,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tabContents = document.querySelectorAll(".tab-content");
 
   tabButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
       // Reset all tabs
       tabButtons.forEach(b => {
         b.classList.remove("active-tab", "text-gray-700", "border-blue-500");
@@ -314,6 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Activate selected tab
       btn.classList.add("active-tab", "text-gray-700", "border-blue-500");
       btn.classList.remove("text-gray-500");
+    
       document.getElementById(btn.dataset.tab).classList.remove("hidden");
     });
   });
@@ -328,7 +332,6 @@ function toggleInfo(id) {
 }
 
 AOS.init({ duration: 1000, once: true });
-
 //show takaful section and scroll to it + takaful plan logic
 document.addEventListener('DOMContentLoaded', function () {
   const showTakafulBtn = document.getElementById('showTakafulBtn');
@@ -342,7 +345,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 420);
 
       document.getElementById('salaryText').textContent = totalSalary > 0 ? formatRM(totalSalary) : 'No data found';
-      document.getElementById('expensesText').textContent = totalExpenses > 0 ? formatRM(totalExpenses) : 'No data found';
+      document.getElementById('expensesText').textContent = totalExpenses > 0 ? formatRM(totalExpenses) : 
+  'No data found';
       document.getElementById('netText').textContent = (totalSalary > 0 && totalExpenses > 0) ? formatRM(totalSalary - totalExpenses) : 'No data found';
     });
   }
@@ -351,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.coverage-card').forEach(card => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.coverage-card').forEach(c => c.classList.remove('ring'));
-      card.classList.add('ring');
+  card.classList.add('ring');
       showCoverage(card.id);
     });
   });
@@ -364,7 +368,7 @@ function showCoverage(plan) {
 
   if (salary <= 0 || expenses <= 0) {
     alert('Please calculate your financial data first.');
-    return;
+  return;
   }
 
   const netSavings = salary - expenses; //calculate net saving
@@ -374,7 +378,7 @@ function showCoverage(plan) {
   switch (plan) {
     case "oneYear": multiplier = 12; break;
     case "fiveYear": multiplier = 60; break;
-    case "tenYear": multiplier = 120; break;
+  case "tenYear": multiplier = 120; break;
     default: multiplier = 12;
   }
 
@@ -386,28 +390,26 @@ function showCoverage(plan) {
   const ceEl = document.getElementById('coverageExpenses');
   if (ciEl) ciEl.textContent = formatRM(coverageIncome);
   if (ceEl) ceEl.textContent = formatRM(coverageExpenses);
-
   // store both income-based and expenses-based coverage so TNA can choose later
   localStorage.setItem("takafulCoverageIncome", String(coverageIncome));
   localStorage.setItem("takafulCoverageExpenses", String(coverageExpenses));
-
   const defaultSelected = "expenses";
   const displayedValue = defaultSelected === "income" ? coverageIncome : coverageExpenses;
   localStorage.setItem("takafulResult", String(displayedValue));
   localStorage.setItem("takafulPlan", plan);
   localStorage.setItem("lifeProtection", String(displayedValue));
-
   // animate display
   const result = document.getElementById('resultSectionTakaful');
   if (result) {
     result.classList.add('animate-fadeIn');
-    result.scrollIntoView({ behavior: "smooth", block: "center" });
+  result.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
 
 function updateLifeProtectionFromBase(selectedBase) {
   // read stored values
-  const storedIncome = parseFloat(localStorage.getItem("totalSalary") || localStorage.getItem("monthlyIncome") || "0") || 0;
+  const storedIncome = parseFloat(localStorage.getItem("totalSalary") || localStorage.getItem("monthlyIncome") || "0") ||
+  0;
   const storedExpenses = parseFloat(localStorage.getItem("totalExpenses") || localStorage.getItem("monthlyExpenses") || "0") || 0;
   const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome") || "0") || 0;
   const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
@@ -416,16 +418,18 @@ function updateLifeProtectionFromBase(selectedBase) {
   const retrievedValue = document.getElementById("retrievedValue");
 
   let coverage = 0;
-  
   if (selectedBase === "income") {
-    coverage = takafulCoverageIncome > 0 ? takafulCoverageIncome : (storedIncome * 12 * 10);
+    coverage = takafulCoverageIncome > 0 ?
+  takafulCoverageIncome : (storedIncome * 12 * 10);
   } else {
-    coverage = takafulCoverageExpenses > 0 ? takafulCoverageExpenses : (storedExpenses * 12 * 10);
+    coverage = takafulCoverageExpenses > 0 ?
+  takafulCoverageExpenses : (storedExpenses * 12 * 10);
   }
 
   if (lifeProtection) lifeProtection.value = Number(coverage).toLocaleString();
   if (retrievedValue) {
-    retrievedValue.textContent = `Based on ${selectedBase === "income" ? "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → 10-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
+    retrievedValue.textContent = `Based on ${selectedBase === "income" ?
+  "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → 10-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
     retrievedValue.classList.remove("hidden");
   }
 
@@ -435,59 +439,32 @@ function updateLifeProtectionFromBase(selectedBase) {
 }
 
 function initializeTNAData() {
-    const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
-    const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0;
+  const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
+  const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0; 
+  const protectionType = document.getElementById("protectionType");
+  const existingLiabilitiesInput = document.getElementById("existingLiabilities");
+  const assetFieldDisplay = document.getElementById("tnaTotalAssetsInput"); 
     
-    const protectionType = document.getElementById("protectionType");
-    const existingLiabilitiesInput = document.getElementById("existingLiabilities");
-    const assetFieldDisplay = document.getElementById("tnaTotalAssetsInput"); 
-    
-    if (existingLiabilitiesInput) {
-        existingLiabilitiesInput.value = storedLiabilities ? Number(storedLiabilities).toLocaleString() : "";
-    }
+  if (existingLiabilitiesInput) {
+    existingLiabilitiesInput.value = storedLiabilities ? Number(storedLiabilities).toLocaleString() : "";
+  }
 
-    if (assetFieldDisplay) {
-        assetFieldDisplay.value = formatRM(storedAssets);
-    }
+  if (assetFieldDisplay) {
+    assetFieldDisplay.value = formatRM(storedAssets);
+  }
 
-    if (protectionType) {
-        const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
-        const prevBase = localStorage.getItem("takafulBase") || ""; 
+  if (protectionType) {
+    const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
+    const prevBase = localStorage.getItem("takafulBase") || ""; 
         
-        if (prevBase === "income" || prevBase === "expenses") {
-            protectionType.value = prevBase;
-        } else {
-            protectionType.value = takafulCoverageExpenses > 0 ? "expenses" : "income";
-        }
-
-        updateLifeProtectionFromBase(protectionType.value);
+    if (prevBase === "income" || prevBase === "expenses") {
+      protectionType.value = prevBase;
+    } 
+    else {
+      protectionType.value = takafulCoverageExpenses > 0 ? "expenses" : "income";
     }
-}
-
-function initializeRetirementData() {
-    const storedSalary = parseFloat(localStorage.getItem("totalSalary") || "0") || 0;
-    // Existing Retirement Fund (PV3 for EPF1 projection)
-    const storedRetirementFund = parseFloat(localStorage.getItem("mainRetirementFundValue") || "0") || 0; 
-    
-    // Get element references
-    const salaryInput = document.getElementById("retCurrentSalary");
-    const fundInput = document.getElementById("currentRetFund");
-    
-    // Populate Current Age with a default if empty (e.g., 30)
-    const currentAgeInput = document.getElementById("retCurrentAge");
-    if (currentAgeInput && !currentAgeInput.value) {
-        currentAgeInput.value = 30;
-    }
-
-    // Populate Current Salary (Read-only)
-    if (salaryInput) {
-        salaryInput.value = formatRM(storedSalary);
-    }
-    
-    // Populate Total Existing Retirement Fund (PV3)
-    if (fundInput) {
-        fundInput.value = storedRetirementFund ? Number(storedRetirementFund).toLocaleString('en-MY', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : "";
-    }
+    updateLifeProtectionFromBase(protectionType.value);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -501,15 +478,12 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeTNAData();
 });
 
-
 //tna calculation
 function calculateNeeds() {
   let lifeProtRaw = document.getElementById("lifeProtection").value || localStorage.getItem("lifeProtection") || "0";
   const lifeProt = parseFloat(String(lifeProtRaw).replace(/,/g, "")) || 0;
-
   const liabilitiesRaw = document.getElementById("existingLiabilities").value || localStorage.getItem("totalLiabilities") || "0";
   const liabilities = parseFloat(String(liabilitiesRaw).replace(/,/g, "")) || 0;
-
   const education = parseFloat((document.getElementById("estimatedChildEducation").value || "0").replace(/,/g, "")) || 0;
   const totalAssets = parseFloat((localStorage.getItem("totalAssets") || "0").replace(/,/g, "")) || 0;
   const life = parseFloat((document.getElementById("life").value || "0").replace(/,/g, "")) || 0;
@@ -524,191 +498,152 @@ function calculateNeeds() {
   // display results
   document.getElementById("totalNeeds").textContent = "RM " + Number(totalNeeds).toLocaleString();
   document.getElementById("totalAssetsCoverage").textContent = "RM " + Number(totalAssetsCoverage).toLocaleString();
-  
   resultElement.textContent = "RM " + Number(absGap).toLocaleString();
 
   resultElement.classList.remove('text-yellow-600', 'text-red-600', 'text-green-600', 'text-blue-600');
 
   let statusMessage = '';
-  
   if (remainingGap > 0) {
     resultElement.classList.add('text-red-600');
-    statusMessage = `You have a financial **shortfall** of RM ${Number(absGap).toLocaleString()}. Consider increasing your coverage.`;
+    statusMessage = `You have a financial **shortfall** of RM ${Number(absGap).toLocaleString()}.
+  Consider increasing your coverage.`;
   } else if (remainingGap < 0) {
     resultElement.classList.add('text-green-600');
-    statusMessage = `You have a financial **surplus** of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
+  statusMessage = `You have a financial **surplus** of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
   } else {
     resultElement.classList.add('text-blue-600');
     statusMessage = `Your needs and coverage are perfectly balanced!`;
   }
-  
   document.getElementById("gapMessage").innerText = statusMessage;
 }
 
-// =========================================================================
-// RETIREMENT CALCULATOR LOGIC (FOLLOWING USER'S SPECIFICATION)
-// =========================================================================
-
-/**
- * Calculates the required retirement fund, projected available fund, and the resulting gap/surplus.
- * NOTE: Assumes getNumericValue and formatRM helper functions are available.
- */
 function calculateRetirement() {
-    // -------------------------------------------------------------------------
-    // A. INPUTS
-    // -------------------------------------------------------------------------
+
+  const currentAge = getNumericValue("retCurrentAge");
+  const retAge = getNumericValue("retAge");
+  const maxAge = getNumericValue("maxAge");
+  if (currentAge <= 0 || retAge <= 0 || maxAge <= 0 || retAge <= currentAge) {
+    alert("Please check your Age inputs. Retirement Age must be greater than Current Age.");
+  return;
+  }
+
+  const n  = retAge - currentAge; // Years until retirement
+  const n1 = maxAge - retAge; // Years during retirement
+  
+  // Economic assumptions
+  const annualExpPct = getNumericValue("annualExpPct", true); // % of salary
+  const i = getNumericValue("inflationRateRet", true); // Inflation
+  const g_ret = getNumericValue("retInvReturn", true); // Return during retirement
+  
+  const currentSalary = Number(
+  document.getElementById("retCurrentSalary").value.replace(/[^\d.-]/g, "")) || 0;
+
+  // part 1 fund needed
+  const PV1 = currentSalary * annualExpPct; //Current salary × % needed
+  const projectedAnnualExpense = PV1 * Math.pow(1 + i, n); //Inflate PV1 until retirement
+  const r_adjusted = ((1 + g_ret) / (1 + i)) - 1; //Inflation-adjusted discount rate
+  let retirementFundNeeded = 0;
+
+  if (Math.abs(r_adjusted) < 0.000001) {
+    retirementFundNeeded = projectedAnnualExpense * n1;
+  } else {
+    retirementFundNeeded = projectedAnnualExpense * ((1 - Math.pow(1 + r_adjusted, -n1)) / r_adjusted);
+  }
+
+  //part 2 available funds
+  // EPF values
+  const PV3 = getNumericValue("retCurrentFund");
+  const r1 = getNumericValue("epfReturn", true);
+  const PMT2 = getNumericValue("annualEpfContribution");
+  const g_salary = getNumericValue("salaryIncrementRate", true);
+  // EPF Existing (Lump Sum FV)
+  const EPF1 = PV3 * Math.pow(1 + r1, n);
+  // EPF Future contributions (Growing annuity)
+  let EPF2 = 0;
+  if (Math.abs(r1 - g_salary) < 0.000001) {
+    EPF2 = PMT2 * n * Math.pow(1 + r1, n - 1);
+  } else {
+    EPF2 = PMT2 * ((Math.pow(1 + r1, n) - Math.pow(1 + g_salary, n)) / (r1 - g_salary));
+  }
+
+  //other funds
+  function calculateFundFV(PV, r, PMT, years) {
+    const lump = PV * Math.pow(1 + r, years);
+    const annuity = PMT > 0 ? (r === 0 ? PMT * years : PMT * ((Math.pow(1 + r, years) - 1) / r)) : 0;
+    return lump + annuity;
+  }
+
+  // Fund 1
+  const FV1 = calculateFundFV(getNumericValue("fund1Value"), getNumericValue("fund1Return", true), getNumericValue("fund1AnnualInv"), n);
+  // Fund 2
+  const FV2 = calculateFundFV(getNumericValue("fund2Value"), getNumericValue("fund2Return", true), getNumericValue("fund2AnnualInv"), n);
+  const projectedAvailableFund = EPF1 + EPF2 + FV1 + FV2;  
+  //display results
+  const retirementGap = retirementFundNeeded - projectedAvailableFund;
+  const absGap = Math.abs(retirementGap);
+
+  // Update UI
+  document.getElementById("retFundNeeded").textContent = formatRM(retirementFundNeeded);
+  document.getElementById("retFundAvailable").textContent = formatRM(projectedAvailableFund);
+
+  const gapElement = document.getElementById("retGap");
+  const messageElement = document.getElementById("retGapMessage");
+  // Reset classes
+  gapElement.classList.remove("text-pink-600", "text-green-600", "text-blue-600");
+
+  let message = "";
+  if (retirementGap > 0) {
+    gapElement.classList.add("text-pink-600");
+    gapElement.textContent = "- " + formatRM(absGap); message = `You have a projected shortfall of <strong>${formatRM(absGap)}</strong>.<br>Consider increasing your EPF contributions or additional investments.`;
+  }
+  else if (retirementGap < 0) {
+    gapElement.classList.add("text-green-600");
+    gapElement.textContent = "+ " + formatRM(absGap);
+    message = `Great job! You have a projected surplus of <strong>${formatRM(absGap)}</strong>.<br>Your retirement plan is on track.`;
+  } 
+  else {
+    gapElement.classList.add("text-blue-600");
+    gapElement.textContent = "RM 0.00";
+    message = `Your projected funds match your estimated needs.`;
+  }
+  messageElement.innerHTML = message;
+  // Show section
+  const resultsSection = document.getElementById("retResultsSection");
+  if (resultsSection) resultsSection.classList.remove("hidden");
+  }
+
+function initializeRetirementData() {
+  const storedMonthlySalary = parseFloat(localStorage.getItem("totalSalary") || "0") || 0;
+  const annualSalary = storedMonthlySalary * 12;
+  const retirementFundInput = document.getElementById("retirementFund"); 
+  const retirementFundInputValue = retirementFundInput ? retirementFundInput.getRawValue() : "0";
+  const storedEPF_raw = retirementFundInputValue || localStorage.getItem("retirementFund") || localStorage.getItem("retirementFundValue") || localStorage.getItem("mainRetirementFundValue") || "0";
+  const storedEPF = parseFloat(String(storedEPF_raw).replace(/[^\d.-]/g, "")) || 0; 
     
-    // 1. Time Variables
-    const currentAge = getNumericValue("retCurrentAge");
-    const retAge = getNumericValue("retAge");
-    const maxAge = getNumericValue("maxAge");
-    
-    // Validation
-    if (currentAge <= 0 || retAge <= 0 || maxAge <= 0 || retAge <= currentAge) {
-        alert("Please check your Age inputs. Retirement Age must be greater than Current Age.");
-        return;
-    }
+  // Get element references
+  const salaryInput = document.getElementById("retCurrentSalary");
+  const epfInput = document.getElementById("retCurrentFund");
+  const currentAgeInput = document.getElementById("retCurrentAge");
 
-    const n = retAge - currentAge;       // Gap to retirement (Accumulation phase)
-    const n1 = maxAge - retAge;          // Retirement duration (Decumulation phase)
+  if (currentAgeInput && !currentAgeInput.value) {
+    currentAgeInput.value = 30;
+  }
 
-    // 2. Economic Assumptions
-    const annualExpPct = getNumericValue("annualExpPct", true);   // % of salary needed
-    const i = getNumericValue("inflationRateRet", true);          // Inflation rate
-    const g_ret = getNumericValue("retInvReturn", true);          // Investment return DURING retirement
-    
-    // 3. Financial Data
-    const currentSalary = getNumericValue("retCurrentSalary");
-    
-    // -------------------------------------------------------------------------
-    // B. PART 1: CALCULATION RETIREMENT FUND NEEDED
-    // -------------------------------------------------------------------------
-    
-    // 1st - Projected Annual Expenses at Retirement Age (Future Value)
-    // Formula: FV = PV x (1+i)^n
-    // PV1 = % x Current Salary
-    const PV1 = currentSalary * annualExpPct;
-    const projectedAnnualExpense = PV1 * Math.pow(1 + i, n);
+  if (salaryInput) {
+    salaryInput.readOnly = true;
+    salaryInput.classList.add("bg-gray-100");
+    salaryInput.value = annualSalary > 0 ? Number(annualSalary).toLocaleString("en-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "";
+  }
 
-    // 2nd - Total Fund Needed at Retirement (Present Value of Annuity at start of retirement)
-    // Formula: PV2 = PMT x [ (1 - (1+r)^(-n1)) / r ]
-    // Where r = inflation adjusted return: [(1+g)/(1+i)] - 1
-    
-    const r_adjusted = ((1 + g_ret) / (1 + i)) - 1;
-    
-    let retirementFundNeeded = 0;
-    
-    // Handle division by zero if r_adjusted is 0
-    if (Math.abs(r_adjusted) < 0.000001) {
-        retirementFundNeeded = projectedAnnualExpense * n1;
-    } else {
-        retirementFundNeeded = projectedAnnualExpense * ((1 - Math.pow(1 + r_adjusted, -n1)) / r_adjusted);
-    }
-
-    // -------------------------------------------------------------------------
-    // C. PART 2: AVAILABLE RETIREMENT FUND (EPF + OTHERS)
-    // -------------------------------------------------------------------------
-
-    // --- SECTION 1: EPF ---
-    const PV3 = getNumericValue("currentRetFund");      // Existing EPF
-    const r1 = getNumericValue("epfReturn", true);      // EPF Return
-    const PMT2 = getNumericValue("annualEpfContribution"); // Annual Contribution
-    const g_salary = getNumericValue("salaryIncrementRate", true); // Salary Increment
-
-    // 1. Projection Existing EPF Fund (Lump Sum FV)
-    // Formula: EPF1 = PV3 x (1+r1)^n
-    const EPF1 = PV3 * Math.pow(1 + r1, n);
-
-    // 2. Projection Future Contribution Growth (Growing Annuity FV)
-    // Formula: EPF2 = PMT2 x [ ((1+r1)^n - (1+g)^n) / (r1 - g) ]
-    let EPF2 = 0;
-    if (Math.abs(r1 - g_salary) < 0.000001) {
-        // Special case where return = growth
-        EPF2 = PMT2 * n * Math.pow(1 + r1, n - 1); 
-    } else {
-        EPF2 = PMT2 * ((Math.pow(1 + r1, n) - Math.pow(1 + g_salary, n)) / (r1 - g_salary));
-    }
-
-    // --- SECTION 2: OTHER FUNDS ---
-    
-    // Helper function for Other Funds formula: FV = [PV * (1+r)^n] + [PMT * FV_Annuity_Factor]
-    // Note: Reference doc annuity formula had a typo (PV formula), used standard FV Annuity formula 
-    // ((1+r)^n - 1)/r to correctly calculate "Fund Value at Retirement age".
-    function calculateFundFV(PV, r, PMT, years) {
-        const lumpSumFV = PV * Math.pow(1 + r, years);
-        let annuityFV = 0;
-        if (PMT > 0) {
-            if (r === 0) {
-                annuityFV = PMT * years;
-            } else {
-                annuityFV = PMT * ((Math.pow(1 + r, years) - 1) / r);
-            }
-        }
-        return lumpSumFV + annuityFV;
-    }
-
-    // Fund 1
-    const fund1PV = getNumericValue("fund1Value");
-    const r2 = getNumericValue("fund1Return", true);
-    const PMT3 = getNumericValue("fund1AnnualInv");
-    const FV1 = calculateFundFV(fund1PV, r2, PMT3, n);
-
-    // Fund 2
-    const fund2PV = getNumericValue("fund2Value");
-    const r3 = getNumericValue("fund2Return", true);
-    const PMT4 = getNumericValue("fund2AnnualInv");
-    const FV2 = calculateFundFV(fund2PV, r3, PMT4, n);
-
-    // TOTAL AVAILABLE
-    const projectedAvailableFund = EPF1 + EPF2 + FV1 + FV2;
-
-    // -------------------------------------------------------------------------
-    // D. RESULTS & DISPLAY
-    // -------------------------------------------------------------------------
-    
-    // Objective: Shortfall/Surplus = Available - Needed (Or Needed - Available, depending on view)
-    // Doc says: Needed - Available = Shortfall
-    const retirementGap = retirementFundNeeded - projectedAvailableFund;
-    const absGap = Math.abs(retirementGap);
-
-    // Update UI
-    document.getElementById("retFundNeeded").textContent = formatRM(retirementFundNeeded);
-    document.getElementById("retFundAvailable").textContent = formatRM(projectedAvailableFund);
-    
-    const gapElement = document.getElementById("retGap");
-    const messageElement = document.getElementById("retGapMessage");
-
-    // Reset classes
-    gapElement.classList.remove("text-pink-600", "text-green-600", "text-blue-600");
-
-    let message = "";
-
-    if (retirementGap > 0) {
-        // Shortfall
-        gapElement.classList.add("text-pink-600");
-        gapElement.textContent = "- " + formatRM(absGap); // Indicate negative impact
-        message = `You have a projected shortfall of <strong>${formatRM(absGap)}</strong>. <br>Consider increasing your EPF contributions or starting a private retirement scheme.`;
-    } else if (retirementGap < 0) {
-        // Surplus
-        gapElement.classList.add("text-green-600");
-        gapElement.textContent = "+ " + formatRM(absGap);
-        message = `Great job! You have a projected surplus of <strong>${formatRM(absGap)}</strong>. <br>Your retirement plan is on track.`;
-    } else {
-        // Balanced
-        gapElement.classList.add("text-blue-600");
-        gapElement.textContent = formatRM(0);
-        message = "Your projected funds perfectly match your estimated needs.";
-    }
-
-    messageElement.innerHTML = message;
-
-    // Show results
-    const resultsSection = document.getElementById("retResultsSection");
-    if (resultsSection) {
-        resultsSection.classList.remove("hidden");
-        // Optional: scroll to results
-    }
+  if (epfInput) {
+    epfInput.readOnly = true; // Ensures the input is read-only
+    epfInput.classList.add("bg-gray-100");      
+    epfInput.value = storedEPF > 0 ? Number(storedEPF).toLocaleString("en-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "";
+  }
 }
+
+// Auto-run sync on load
+document.addEventListener("DOMContentLoaded", initializeRetirementData);
 
 document.addEventListener("DOMContentLoaded", () => {
   const tabButtons = document.querySelectorAll(".tab-btn");
@@ -735,28 +670,30 @@ document.addEventListener("DOMContentLoaded", () => {
   defaultContent.classList.remove("hidden");
 
   // 4. Set click behaviour
-  tabButtons.forEach(btn => {
+  tabButtons.forEach(btn => 
+  {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.tab;
-
       // Reset all tabs
       tabButtons.forEach(b => {
         b.classList.remove("active-tab", "border-blue-500");
         b.classList.add("text-gray-500");
       });
-
       // Hide all contents
       tabContents.forEach(tc => tc.classList.add("hidden"));
-
       // Activate clicked tab
       btn.classList.add("active-tab", "border-blue-500");
       btn.classList.remove("text-gray-500");
-
       // Show target content
       document.getElementById(targetId).classList.remove("hidden");
-
       if (targetId === "tnaTab") {
-        initializeTNAData(); // 2. Call the function when the TNA tab is clicked
+        initializeTNAData();
+      // 2. Call the function when the TNA tab is clicked
+      }
+
+      if (targetId === "retirementTab") {
+        initializeRetirementData();
+      // 2. Call the function when the Retirement tab is clicked
       }
     });
   });

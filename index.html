@@ -501,14 +501,7 @@
         </div>
     </div>
 
-  <div id="retirementTab" class="tab-content hidden">
-    <div class="p-4 bg-gray-50 rounded-xl">
-      <h3 class="text-lg font-semibold mb-2">Retirement Calculator</h3>
-      <p class="text-gray-600 text-sm mb-4">Coming soon...</p>
-    </div>
-  </div>
-
-    <!--div id="retirementTab" class="tab-content hidden">
+    <div id="retirementTab" class="tab-content hidden">
     
     <div class="text-center mt-8 animate-fadeIn show">
         <h1 class="text-2xl font-bold text-blue-700">Retirement Planning Calculator</h1>
@@ -532,32 +525,34 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Retirement Age</label>
                         <input id="retAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="55">
+                        <p class="text-xs text-gray-500 mt-1">User can enter 55 to 60 years old (Reference: KWSP Withdrawal Age)</p>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Max Age (Life Expectancy)</label>
                         <input id="maxAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="85">
+                        <p class="text-xs text-gray-500 mt-1">User can enter 70 to 100 years old (Reference: DOSM)</p>
                     </div>
                 </div>
 
                 <div class="space-y-4">
                     <h3 class="font-semibold text-gray-700">Expenses & Assumptions</h3>
                      <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Current Salary (RM)</label>
-                        <input id="retCurrentSalary" type="text" readonly class="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Annual Current Salary (RM)</label>
+                        <input id="retCurrentSalary" type="text" readonly class="num-input w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
                         <p class="text-xs text-gray-500 mt-1">Retrieved from Income section</p>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">% of Salary Needed</label>
                         <input id="annualExpPct" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="60">
-                        <p class="text-xs text-gray-500 mt-1">Projected Annual Expenses (PV1)</p>
+                        <p class="text-xs text-gray-500 mt-1">Projected Annual Expenses (Default 60%)</p>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                          <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Inflation (i)</label>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Inflation (%)</label>
                             <input id="inflationRateRet" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="3">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fund Return (g)</label>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fund Return (%)</label>
                             <input id="retInvReturn" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="4">
                             <p class="text-xs text-gray-500 mt-1">During retirement phase</p>
                         </div>
@@ -576,19 +571,19 @@
                 <h3 class="font-bold text-indigo-700 mb-4 border-b border-indigo-200 pb-2">1. EPF Projection</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Existing EPF (PV3)</label>
-                        <input id="currentRetFund" type="text" readonly class="num-input w-full p-3 rounded-lg bg-white/60 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Existing EPF (RM)</label>
+                        <input id="retCurrentFund" type="text" readonly class="num-input w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
                     </div>
                     <div>
-                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Est. EPF Return (r1)</label>
+                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Est. EPF Return (%)</label>
                          <input id="epfReturn" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" value="5">
                     </div>
                     <div>
-                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Total Annual Contribution (PMT2)</label>
+                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Total Annual Contribution (RM)</label>
                          <input id="annualEpfContribution" type="text" class="num-input w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 12,000">
                     </div>
                     <div>
-                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Salary Increment (g)</label>
+                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Salary Increment (%)</label>
                          <input id="salaryIncrementRate" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" value="3">
                     </div>
                 </div>
@@ -598,9 +593,9 @@
                 <h3 class="font-bold text-gray-700 mb-4 border-b border-gray-100 pb-2">2. Other Funds Projection</h3>
                 
                 <div class="hidden md:grid grid-cols-3 gap-4 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    <div>Current Fund Value (PV)</div>
-                    <div>Est. Return % (r)</div>
-                    <div>Annual Investment (PMT)</div>
+                    <div>Current Fund Value</div>
+                    <div>Est. Return</div>
+                    <div>Annual Investment</div>
                 </div>
 
                 <div class="mb-4">
@@ -654,12 +649,12 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
                     <div class="bg-purple-50 rounded-xl p-5 border border-purple-100">
-                        <p class="text-purple-600 text-xs font-bold uppercase tracking-wider mb-2">Fund Needed (Step 1)</p>
+                        <p class="text-purple-600 text-xs font-bold uppercase tracking-wider mb-2">Fund Needed</p>
                         <p id="retFundNeeded" class="text-2xl font-extrabold text-purple-700">RM0</p>
                         <p class="text-xs text-gray-400 mt-2">At retirement age</p>
                     </div>
                     <div class="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
-                        <p class="text-indigo-600 text-xs font-bold uppercase tracking-wider mb-2">projected Available (Step 2)</p>
+                        <p class="text-indigo-600 text-xs font-bold uppercase tracking-wider mb-2">Projected Available</p>
                         <p id="retFundAvailable" class="text-2xl font-extrabold text-indigo-700">RM0</p>
                         <p class="text-xs text-gray-400 mt-2">EPF + Other Funds</p>
                     </div>
@@ -676,12 +671,19 @@
             </div>
         </div>
 
-        <div class="text-center text-xs text-gray-400 mt-6 pt-4 border-t border-gray-200">
-             <p>Disclaimer: Figures are estimates based on your inputs (Inflation, Returns, etc). Consult a licensed planner for professional advice.</p>
+        <div class="text-center italic text-xs text-gray-400 mt-6 pt-4 border-t border-gray-200">
+          <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
+            There is no guarantee of accuracy and projections are based on your input in the respective fields.
+            The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
+            The calculator is provided to you at no cost and is general in nature.
+            It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
+            We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
+            You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
+          </p>
         </div>
 
     </div>
-</div-->
+</div>
 
   <div id="investmentTab" class="tab-content hidden">
     <div class="p-4 bg-gray-50 rounded-xl">
