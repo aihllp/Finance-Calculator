@@ -405,40 +405,19 @@ function updateLifeProtectionFromBase(selectedBase) {
   const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome") || "0") || 0;
   const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
 
-  //to get coverage period from takaful section
-  const storedPlan = localStorage.getItem("takafulPlan") || "tenYear";
-  let fallbackMultiplier = 120; //default 10 years
-  let coverageYears = 10;
-
-  switch (storedPlan){
-    case "oneYear":
-      fallbackMultiplier = 12;
-      coverageYears = 1;
-      break;
-    case "fiveYear":
-      fallbackMultiplier = 60;
-      coverageYears = 5;
-      break;
-    case "tenYear":
-    default:
-      fallbackMultiplier = 120;
-      coverageYears = 10;
-      break;
-  }
-
   const lifeProtection = document.getElementById("lifeProtection");
   const retrievedValue = document.getElementById("retrievedValue");
 
   let coverage = 0;
   if (selectedBase === "income") {
-    coverage = takafulCoverageIncome > 0 ? takafulCoverageIncome : (storedIncome * fallbackMultiplier);
+    coverage = takafulCoverageIncome > 0 ? takafulCoverageIncome : (storedIncome * 12 * 10);
   } else {
-    coverage = takafulCoverageExpenses > 0 ? takafulCoverageExpenses : (storedExpenses * fallbackMultiplier);
+    coverage = takafulCoverageExpenses > 0 ? takafulCoverageExpenses : (storedExpenses * 12 * 10);
   }
 
   if (lifeProtection) lifeProtection.value = Number(coverage).toLocaleString();
   if (retrievedValue) {
-    retrievedValue.textContent = `Based on ${selectedBase === "income" ? "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → ${coverageYears}-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
+    retrievedValue.textContent = `Based on ${selectedBase === "income" ? "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → 10-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
     retrievedValue.classList.remove("hidden");
   }
 
