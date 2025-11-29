@@ -108,8 +108,7 @@ function calculate() {
   document.getElementById("networth").textContent = formatRM(networth);
   document.getElementById("wealthratio").textContent = currentWealthRatio === Infinity ? "∞" : currentWealthRatio.toFixed(2);
   document.getElementById("savingsratio").textContent = savingsratio.toFixed(2) + "%";
-  document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ?
-  "∞" : liquidityratio.toFixed(2);
+  document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ? "∞" : liquidityratio.toFixed(2);
   document.getElementById("debtServiceRatio").textContent = debtServiceRatio.toFixed(2) + "%";
 
   // Determine health label based on Wealth Ratio
@@ -203,10 +202,9 @@ function updateRatiosChart(savingsRatio, liquidityRatio, debtServiceRatio) {
 
   if (savingsElem) savingsElem.style.color = savingsRatio >= savingsBenchmark ? "#16a34a" : "#dc2626";
   const liquidityValue = liquidityRatio === Infinity ? 200 : liquidityRatio;
-  if (liquidityElem) liquidityElem.style.color = liquidityValue >= liquidityBenchmark ?
-  "#16a34a" : "#dc2626";
-
+  if (liquidityElem) liquidityElem.style.color = liquidityValue >= liquidityBenchmark ? "#16a34a" : "#dc2626";
   if (debtElem) debtElem.style.color = debtServiceRatio <= debtBenchmark ? "#16a34a" : "#dc2626";
+
   //destroy previous chart if exists
   if (savingsChartInstance) savingsChartInstance.destroy();
   if (liquidityChartInstance) liquidityChartInstance.destroy();
@@ -229,16 +227,13 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
   const isDebtService = label.toLowerCase().includes("debt");
   if (isDebtService) {
     if (userValue < benchmarkValue) resultColor = "#16a34a";
-  // green
     else if (userValue === benchmarkValue) resultColor = "#facc15";
-  // yellow
-    else resultColor = "#dc2626"; // red
-  } else {
+    else resultColor = "#dc2626";
+  } 
+  else {
     if (userValue > benchmarkValue) resultColor = "#16a34a";
-  // green
     else if (userValue === benchmarkValue) resultColor = "#facc15";
-  // yellow
-    else resultColor = "#dc2626"; // red
+    else resultColor = "#dc2626";
   }
 
   return new Chart(ctx, {
@@ -251,8 +246,7 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
           data: [benchmarkValue],
           backgroundColor: "#3B82F6",
           borderRadius: 6,
-       
-  },
+        },
         {
           label: "Your Result",
           data: [userValue],
@@ -265,7 +259,7 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
       responsive: true,
       plugins: {
         legend: 
-  {
+        {
           display: true,
           position: "bottom",
           labels: { color: "#4b5563", font: { size: 11 } },
@@ -285,8 +279,10 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
           ticks: { color: "#6b7280" },
         },
       },
-      animation: { duration: 
-  900, easing: "easeOutQuart" },
+      animation: { 
+        duration: 900, 
+        easing: "easeOutQuart"
+      },
     },
   });
 }
@@ -307,14 +303,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   tabButtons.forEach(btn => {
     btn.addEventListener("click", (e) => {
-      // Reset all tabs
       tabButtons.forEach(b => {
         b.classList.remove("active-tab", "text-gray-700", "border-blue-500");
         b.classList.add("text-gray-500");
       });
       tabContents.forEach(tc => tc.classList.add("hidden"));
 
-      // Activate selected tab
       btn.classList.add("active-tab", "text-gray-700", "border-blue-500");
       btn.classList.remove("text-gray-500");
     
@@ -345,8 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 420);
 
       document.getElementById('salaryText').textContent = totalSalary > 0 ? formatRM(totalSalary) : 'No data found';
-      document.getElementById('expensesText').textContent = totalExpenses > 0 ? formatRM(totalExpenses) : 
-  'No data found';
+      document.getElementById('expensesText').textContent = totalExpenses > 0 ? formatRM(totalExpenses) : 'No data found';
       document.getElementById('netText').textContent = (totalSalary > 0 && totalExpenses > 0) ? formatRM(totalSalary - totalExpenses) : 'No data found';
     });
   }
@@ -355,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.coverage-card').forEach(card => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.coverage-card').forEach(c => c.classList.remove('ring'));
-  card.classList.add('ring');
+      card.classList.add('ring');
       showCoverage(card.id);
     });
   });
@@ -371,65 +364,81 @@ function showCoverage(plan) {
   return;
   }
 
-  const netSavings = salary - expenses; //calculate net saving
+  const netSavings = salary - expenses; //calculate net saving (seems not used later?)
 
   //calculation for takaful coverage
   let multiplier;
   switch (plan) {
     case "oneYear": multiplier = 12; break;
     case "fiveYear": multiplier = 60; break;
-  case "tenYear": multiplier = 120; break;
+    case "tenYear": multiplier = 120; break;
     default: multiplier = 12;
   }
 
   const coverageIncome = salary * multiplier;
   const coverageExpenses = expenses * multiplier;
 
-  // show values in takaful UI
-  const ciEl = document.getElementById('coverageIncome');
+  const ciEl = document.getElementById('coverageIncome'); //show values
   const ceEl = document.getElementById('coverageExpenses');
   if (ciEl) ciEl.textContent = formatRM(coverageIncome);
   if (ceEl) ceEl.textContent = formatRM(coverageExpenses);
-  // store both income-based and expenses-based coverage so TNA can choose later
+  // store both income-based and expenses-based coverage so tna can choose later
   localStorage.setItem("takafulCoverageIncome", String(coverageIncome));
   localStorage.setItem("takafulCoverageExpenses", String(coverageExpenses));
   const defaultSelected = "expenses";
   const displayedValue = defaultSelected === "income" ? coverageIncome : coverageExpenses;
   localStorage.setItem("takafulResult", String(displayedValue));
-  localStorage.setItem("takafulPlan", plan);
+  localStorage.setItem("takafulPlan", plan); //selected plan is stored here
   localStorage.setItem("lifeProtection", String(displayedValue));
   // animate display
   const result = document.getElementById('resultSectionTakaful');
   if (result) {
     result.classList.add('animate-fadeIn');
-  result.scrollIntoView({ behavior: "smooth", block: "center" });
+    result.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
 
 function updateLifeProtectionFromBase(selectedBase) {
   // read stored values
-  const storedIncome = parseFloat(localStorage.getItem("totalSalary") || localStorage.getItem("monthlyIncome") || "0") ||
-  0;
+  const storedIncome = parseFloat(localStorage.getItem("totalSalary") || localStorage.getItem("monthlyIncome") || "0") || 0;
   const storedExpenses = parseFloat(localStorage.getItem("totalExpenses") || localStorage.getItem("monthlyExpenses") || "0") || 0;
   const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome") || "0") || 0;
   const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
+
+  //to get coverage period from takaful section
+  const storedPlan = localStorage.getItem("takafulPlan") || "tenYear";
+  let fallbackMultiplier = 120; //default 10 years
+  let coverageYears = 10;
+
+  switch (storedPlan){
+    case "oneYear":
+      fallbackMultiplier = 12;
+      coverageYears = 1;
+      break;
+    case "fiveYear":
+      fallbackMultiplier = 60;
+      coverageYears = 5;
+      break;
+    case "tenYear":
+    default:
+      fallbackMultiplier = 120;
+      coverageYears = 10;
+      break;
+  }
 
   const lifeProtection = document.getElementById("lifeProtection");
   const retrievedValue = document.getElementById("retrievedValue");
 
   let coverage = 0;
   if (selectedBase === "income") {
-    coverage = takafulCoverageIncome > 0 ?
-  takafulCoverageIncome : (storedIncome * 12 * 10);
+    coverage = takafulCoverageIncome > 0 ? takafulCoverageIncome : (storedIncome * fallbackMultiplier);
   } else {
-    coverage = takafulCoverageExpenses > 0 ?
-  takafulCoverageExpenses : (storedExpenses * 12 * 10);
+    coverage = takafulCoverageExpenses > 0 ? takafulCoverageExpenses : (storedExpenses * fallbackMultiplier);
   }
 
   if (lifeProtection) lifeProtection.value = Number(coverage).toLocaleString();
   if (retrievedValue) {
-    retrievedValue.textContent = `Based on ${selectedBase === "income" ?
-  "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → 10-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
+    retrievedValue.textContent = `Based on ${selectedBase === "income" ? "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → ${coverageYears}-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
     retrievedValue.classList.remove("hidden");
   }
 
@@ -505,11 +514,10 @@ function calculateNeeds() {
   let statusMessage = '';
   if (remainingGap > 0) {
     resultElement.classList.add('text-red-600');
-    statusMessage = `You have a financial **shortfall** of RM ${Number(absGap).toLocaleString()}.
-  Consider increasing your coverage.`;
+    statusMessage = `You have a financial **shortfall** of RM ${Number(absGap).toLocaleString()}. Consider increasing your coverage.`;
   } else if (remainingGap < 0) {
     resultElement.classList.add('text-green-600');
-  statusMessage = `You have a financial **surplus** of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
+    statusMessage = `You have a financial **surplus** of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
   } else {
     resultElement.classList.add('text-blue-600');
     statusMessage = `Your needs and coverage are perfectly balanced!`;
@@ -518,7 +526,6 @@ function calculateNeeds() {
 }
 
 function calculateRetirement() {
-
   const currentAge = getNumericValue("retCurrentAge");
   const retAge = getNumericValue("retAge");
   const maxAge = getNumericValue("maxAge");
@@ -527,8 +534,8 @@ function calculateRetirement() {
   return;
   }
 
-  const n  = retAge - currentAge; // Years until retirement
-  const n1 = maxAge - retAge; // Years during retirement
+  const n  = retAge - currentAge; // until retirement
+  const n1 = maxAge - retAge; // during retirement
   
   // Economic assumptions
   const annualExpPct = getNumericValue("annualExpPct", true); // % of salary
@@ -556,8 +563,7 @@ function calculateRetirement() {
   const r1 = getNumericValue("epfReturn", true);
   const PMT2 = getNumericValue("annualEpfContribution");
   const g_salary = getNumericValue("salaryIncrementRate", true);
-  // EPF Existing (Lump Sum FV)
-  const EPF1 = PV3 * Math.pow(1 + r1, n);
+  const EPF1 = PV3 * Math.pow(1 + r1, n); // EPF Existing (Lump Sum FV)
   // EPF Future contributions (Growing annuity)
   let EPF2 = 0;
   if (Math.abs(r1 - g_salary) < 0.000001) {
@@ -573,12 +579,10 @@ function calculateRetirement() {
     return lump + annuity;
   }
 
-  // Fund 1
   const FV1 = calculateFundFV(getNumericValue("fund1Value"), getNumericValue("fund1Return", true), getNumericValue("fund1AnnualInv"), n);
-  // Fund 2
   const FV2 = calculateFundFV(getNumericValue("fund2Value"), getNumericValue("fund2Return", true), getNumericValue("fund2AnnualInv"), n);
   const projectedAvailableFund = EPF1 + EPF2 + FV1 + FV2;  
-  //display results
+  
   const retirementGap = retirementFundNeeded - projectedAvailableFund;
   const absGap = Math.abs(retirementGap);
 
