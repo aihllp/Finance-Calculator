@@ -361,35 +361,52 @@ function showCoverage(plan) {
 
   if (salary <= 0 || expenses <= 0) {
     alert('Please calculate your financial data first.');
-  return;
+    return;
   }
 
-  const netSavings = salary - expenses; //calculate net saving (seems not used later?)
+  // Define multipliers for 1-year, 5-year, and 10-year coverage
+  const multiplierOneYear = 12;
+  const multiplierFiveYear = 60;
+  const multiplierTenYear = 120; // This is the value needed for TNA later
 
-  //calculation for takaful coverage
-  let multiplier;
+  // Calculate coverage for the currently selected plan
+  let currentMultiplier;
   switch (plan) {
-    case "oneYear": multiplier = 12; break;
-    case "fiveYear": multiplier = 60; break;
-    case "tenYear": multiplier = 120; break;
-    default: multiplier = 12;
+    case "oneYear": currentMultiplier = multiplierOneYear; break;
+    case "fiveYear": currentMultiplier = multiplierFiveYear; break;
+    case "tenYear": currentMultiplier = multiplierTenYear; break;
+    default: currentMultiplier = multiplierOneYear;
   }
 
-  const coverageIncome = salary * multiplier;
-  const coverageExpenses = expenses * multiplier;
+  const coverageIncome = salary * currentMultiplier;
+  const coverageExpenses = expenses * currentMultiplier;
 
-  const ciEl = document.getElementById('coverageIncome'); //show values
+  // --- NEW: Calculate and Store 10-Year Coverage Separately ---
+  const coverageIncome10Y = salary * multiplierTenYear;
+  const coverageExpenses10Y = expenses * multiplierTenYear;
+  
+  // Store the 10-year values in new keys for reliable retrieval by TNA
+  localStorage.setItem("takafulCoverageIncome10Y", String(coverageIncome10Y));
+  localStorage.setItem("takafulCoverageExpenses10Y", String(coverageExpenses10Y));
+  
+  // --- END NEW ---
+
+  const ciEl = document.getElementById('coverageIncome'); 
   const ceEl = document.getElementById('coverageExpenses');
   if (ciEl) ciEl.textContent = formatRM(coverageIncome);
   if (ceEl) ceEl.textContent = formatRM(coverageExpenses);
-  // store both income-based and expenses-based coverage so tna can choose later
-  localStorage.setItem("takafulCoverageIncome", String(coverageIncome));
+  
+  // Keep the old keys to store the *currently displayed* value for backward compatibility/other logic
+  localStorage.setItem("takafulCoverageIncome", String(coverageIncome)); 
   localStorage.setItem("takafulCoverageExpenses", String(coverageExpenses));
+  
   const defaultSelected = "expenses";
   const displayedValue = defaultSelected === "income" ? coverageIncome : coverageExpenses;
+  
   localStorage.setItem("takafulResult", String(displayedValue));
-  localStorage.setItem("takafulPlan", plan); //selected plan is stored here
+  localStorage.setItem("takafulPlan", plan);
   localStorage.setItem("lifeProtection", String(displayedValue));
+  
   // animate display
   const result = document.getElementById('resultSectionTakaful');
   if (result) {
@@ -399,8 +416,9 @@ function showCoverage(plan) {
 }
 
 function updateLifeProtectionFromBase(selectedBase) {
-  const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome") || "0");
-  const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0");
+  // 🔑 Updated to retrieve the dedicated 10-Year storage keys
+  const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome10Y") || "0");
+  const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses10Y") || "0");
 
   const lifeProtection = document.getElementById("lifeProtection");
   const retrievedValue = document.getElementById("retrievedValue");
@@ -426,7 +444,8 @@ function updateLifeProtectionFromBase(selectedBase) {
 
   // Save selected base + value used
   localStorage.setItem("takafulBase", selectedBase);
-  localStorage.setItem("takafulResult", String(coverage));
+  // Store the 10-year coverage value in the result keys
+  localStorage.setItem("takafulResult", String(coverage)); 
   localStorage.setItem("lifeProtection", String(coverage));
 }
 
