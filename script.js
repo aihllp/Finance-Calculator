@@ -399,32 +399,37 @@ function showCoverage(plan) {
 }
 
 function updateLifeProtectionFromBase(selectedBase) {
-  // read stored values
-  const storedIncome = parseFloat(localStorage.getItem("totalSalary") || localStorage.getItem("monthlyIncome") || "0") || 0;
-  const storedExpenses = parseFloat(localStorage.getItem("totalExpenses") || localStorage.getItem("monthlyExpenses") || "0") || 0;
-  const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome") || "0") || 0;
-  const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
+  const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome") || "0");
+  const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0");
 
   const lifeProtection = document.getElementById("lifeProtection");
   const retrievedValue = document.getElementById("retrievedValue");
 
-  let coverage = 0;
-  if (selectedBase === "income") {
-    coverage = takafulCoverageIncome > 0 ? takafulCoverageIncome : (storedIncome * 12 * 10);
-  } else {
-    coverage = takafulCoverageExpenses > 0 ? takafulCoverageExpenses : (storedExpenses * 12 * 10);
+  // Always retrieve only the 10-year values from takaful calculation
+  let coverage = selectedBase === "income" 
+    ? takafulCoverageIncome 
+    : takafulCoverageExpenses;
+
+  // Safety fallback (should rarely happen)
+  if (!coverage || coverage <= 0) coverage = 0;
+
+  if (lifeProtection) {
+    lifeProtection.value = Number(coverage).toLocaleString();
   }
 
-  if (lifeProtection) lifeProtection.value = Number(coverage).toLocaleString();
   if (retrievedValue) {
-    retrievedValue.textContent = `Based on ${selectedBase === "income" ? "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → 10-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
+    retrievedValue.textContent = `Retrieved 10-Year Coverage Based On ${
+      selectedBase === "income" ? "Income" : "Expenses"
+    }: RM ${Number(coverage).toLocaleString()}`;
     retrievedValue.classList.remove("hidden");
   }
 
+  // Save selected base + value used
   localStorage.setItem("takafulBase", selectedBase);
   localStorage.setItem("takafulResult", String(coverage));
   localStorage.setItem("lifeProtection", String(coverage));
 }
+
 
 function initializeTNAData() {
   const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
