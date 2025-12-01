@@ -361,35 +361,52 @@ function showCoverage(plan) {
 
   if (salary <= 0 || expenses <= 0) {
     alert('Please calculate your financial data first.');
-  return;
+    return;
   }
 
-  const netSavings = salary - expenses; //calculate net saving (seems not used later?)
+  // Define multipliers for 1-year, 5-year, and 10-year coverage
+  const multiplierOneYear = 12;
+  const multiplierFiveYear = 60;
+  const multiplierTenYear = 120; // This is the value needed for TNA later
 
-  //calculation for takaful coverage
-  let multiplier;
+  // Calculate coverage for the currently selected plan
+  let currentMultiplier;
   switch (plan) {
-    case "oneYear": multiplier = 12; break;
-    case "fiveYear": multiplier = 60; break;
-    case "tenYear": multiplier = 120; break;
-    default: multiplier = 12;
+    case "oneYear": currentMultiplier = multiplierOneYear; break;
+    case "fiveYear": currentMultiplier = multiplierFiveYear; break;
+    case "tenYear": currentMultiplier = multiplierTenYear; break;
+    default: currentMultiplier = multiplierOneYear;
   }
 
-  const coverageIncome = salary * multiplier;
-  const coverageExpenses = expenses * multiplier;
+  const coverageIncome = salary * currentMultiplier;
+  const coverageExpenses = expenses * currentMultiplier;
 
-  const ciEl = document.getElementById('coverageIncome'); //show values
+  // --- NEW: Calculate and Store 10-Year Coverage Separately ---
+  const coverageIncome10Y = salary * multiplierTenYear;
+  const coverageExpenses10Y = expenses * multiplierTenYear;
+  
+  // Store the 10-year values in new keys for reliable retrieval by TNA
+  localStorage.setItem("takafulCoverageIncome10Y", String(coverageIncome10Y));
+  localStorage.setItem("takafulCoverageExpenses10Y", String(coverageExpenses10Y));
+  
+  // --- END NEW ---
+
+  const ciEl = document.getElementById('coverageIncome'); 
   const ceEl = document.getElementById('coverageExpenses');
   if (ciEl) ciEl.textContent = formatRM(coverageIncome);
   if (ceEl) ceEl.textContent = formatRM(coverageExpenses);
-  // store both income-based and expenses-based coverage so tna can choose later
-  localStorage.setItem("takafulCoverageIncome", String(coverageIncome));
+  
+  // Keep the old keys to store the *currently displayed* value for backward compatibility/other logic
+  localStorage.setItem("takafulCoverageIncome", String(coverageIncome)); 
   localStorage.setItem("takafulCoverageExpenses", String(coverageExpenses));
+  
   const defaultSelected = "expenses";
   const displayedValue = defaultSelected === "income" ? coverageIncome : coverageExpenses;
+  
   localStorage.setItem("takafulResult", String(displayedValue));
-  localStorage.setItem("takafulPlan", plan); //selected plan is stored here
+  localStorage.setItem("takafulPlan", plan);
   localStorage.setItem("lifeProtection", String(displayedValue));
+  
   // animate display
   const result = document.getElementById('resultSectionTakaful');
   if (result) {
@@ -399,32 +416,39 @@ function showCoverage(plan) {
 }
 
 function updateLifeProtectionFromBase(selectedBase) {
-  // read stored values
-  const storedIncome = parseFloat(localStorage.getItem("totalSalary") || localStorage.getItem("monthlyIncome") || "0") || 0;
-  const storedExpenses = parseFloat(localStorage.getItem("totalExpenses") || localStorage.getItem("monthlyExpenses") || "0") || 0;
-  const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome") || "0") || 0;
-  const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
+  // 🔑 Updated to retrieve the dedicated 10-Year storage keys
+  const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome10Y") || "0");
+  const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses10Y") || "0");
 
   const lifeProtection = document.getElementById("lifeProtection");
   const retrievedValue = document.getElementById("retrievedValue");
 
-  let coverage = 0;
-  if (selectedBase === "income") {
-    coverage = takafulCoverageIncome > 0 ? takafulCoverageIncome : (storedIncome * 12 * 10);
-  } else {
-    coverage = takafulCoverageExpenses > 0 ? takafulCoverageExpenses : (storedExpenses * 12 * 10);
+  // Always retrieve only the 10-year values from takaful calculation
+  let coverage = selectedBase === "income" 
+    ? takafulCoverageIncome 
+    : takafulCoverageExpenses;
+
+  // Safety fallback (should rarely happen)
+  if (!coverage || coverage <= 0) coverage = 0;
+
+  if (lifeProtection) {
+    lifeProtection.value = Number(coverage).toLocaleString();
   }
 
-  if (lifeProtection) lifeProtection.value = Number(coverage).toLocaleString();
   if (retrievedValue) {
-    retrievedValue.textContent = `Based on ${selectedBase === "income" ? "Monthly Income" : "Monthly Expenses"}: RM ${selectedBase === "income" ? Number(storedIncome).toLocaleString() : Number(storedExpenses).toLocaleString()} → 10-Year Coverage: RM ${Number(coverage).toLocaleString()}`;
+    retrievedValue.textContent = `Retrieved 10-Year Coverage Based On ${
+      selectedBase === "income" ? "Income" : "Expenses"
+    }: RM ${Number(coverage).toLocaleString()}`;
     retrievedValue.classList.remove("hidden");
   }
 
+  // Save selected base + value used
   localStorage.setItem("takafulBase", selectedBase);
-  localStorage.setItem("takafulResult", String(coverage));
+  // Store the 10-year coverage value in the result keys
+  localStorage.setItem("takafulResult", String(coverage)); 
   localStorage.setItem("lifeProtection", String(coverage));
 }
+
 
 function initializeTNAData() {
   const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
