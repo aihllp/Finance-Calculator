@@ -652,48 +652,36 @@ function initializeRetirementData() {
   }
 }
 
-function calculateInvestment() {
+function parseRM(value) {
+    if (!value) return 0;
+    return Number(value.toString().replace(/[^0-9.-]/g, "")) || 0;
+}
 
-    function parseRM(value) {
-        if (!value) return 0;
-        return Number(value.toString().replace(/[^0-9.-]/g, "")) || 0;
-    }
+function futureValue(PV, r, n, annual) {
+    const growth = Math.pow(1 + r, n);
+    const fvPV = PV * growth;
+    const fvPMT = r > 0 ? annual * ((growth - 1) / r) : annual * n;
+    return fvPV + fvPMT;
+}
 
-    function futureValue(PV, r, n, annual) {
-        const growth = Math.pow(1 + r, n);
-        const fvPV = PV * growth;
-        const fvPMT = r > 0 ? annual * ((growth - 1) / r) : annual * n;
-        return fvPV + fvPMT;
-    }
+function calculateFund1() {
+    const PV = parseRM(document.getElementById("invFund1Value").value);
+    const R  = Number(document.getElementById("invFund1Return").value) / 100;
+    const PMT = parseRM(document.getElementById("invFund1AnnualInv").value);
+    const N = Number(document.getElementById("invFund1Years").value);
 
-    // Fund 1
-    const f1PV = parseRM(document.getElementById("invFund1Value").value);
-    const f1R = Number(document.getElementById("invFund1Return").value) / 100;
-    const f1PMT = parseRM(document.getElementById("invFund1AnnualInv").value);
-    const f1N = Number(document.getElementById("invFund1Years").value);
+    const FV = futureValue(PV, R, N, PMT);
+    document.getElementById("invFund1Projected").textContent = formatRM(FV);
+}
 
-    const f1FV = futureValue(f1PV, f1R, f1N, f1PMT);
-    document.getElementById("invFund1Projected").textContent = formatRM(f1FV);
+function calculateFund2() {
+    const PV = parseRM(document.getElementById("invFund2Value").value);
+    const R  = Number(document.getElementById("invFund2Return").value) / 100;
+    const PMT = parseRM(document.getElementById("invFund2AnnualInv").value);
+    const N = Number(document.getElementById("invFund2Years").value);
 
-    // Fund 2
-    const f2PV = parseRM(document.getElementById("invFund2Value").value);
-    const f2R = Number(document.getElementById("invFund2Return").value) / 100;
-    const f2PMT = parseRM(document.getElementById("invFund2AnnualInv").value);
-    const f2N = Number(document.getElementById("invFund2Years").value);
-
-    const f2FV = futureValue(f2PV, f2R, f2N, f2PMT);
-    document.getElementById("invFund2Projected").textContent = formatRM(f2FV);
-
-    // Total
-    const total = f1FV + f2FV;
-    document.getElementById("invTotalProjected").textContent = formatRM(total);
-
-    // Optional message
-    document.getElementById("invMessage").textContent =
-        "Based on your inputs, your combined investment projection is shown above.";
-
-    // Make sure result section is visible
-    document.getElementById("invResultsSection").classList.remove("hidden");
+    const FV = futureValue(PV, R, N, PMT);
+    document.getElementById("invFund2Projected").textContent = formatRM(FV);
 }
 
 // Auto-run sync on load
