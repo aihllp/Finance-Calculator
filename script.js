@@ -586,6 +586,9 @@ function calculateRetirement() {
   const FV2 = calculateFundFV(getNumericValue("fund2Value"), getNumericValue("fund2Return", true), getNumericValue("fund2AnnualInv"), n);
   const projectedAvailableFund = EPF1 + EPF2 + FV1 + FV2;  
   
+  document.getElementById("fund1ProjectedValue").textContent = formatRM(FV1);
+  document.getElementById("fund2ProjectedValue").textContent = formatRM(FV2);
+  
   const retirementGap = retirementFundNeeded - projectedAvailableFund;
   const absGap = Math.abs(retirementGap);
 
@@ -643,10 +646,54 @@ function initializeRetirementData() {
   }
 
   if (epfInput) {
-    epfInput.readOnly = true; // Ensures the input is read-only
+    epfInput.readOnly = true;
     epfInput.classList.add("bg-gray-100");      
     epfInput.value = storedEPF > 0 ? Number(storedEPF).toLocaleString("en-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "";
   }
+}
+
+function calculateInvestment() {
+
+    function parseRM(value) {
+        if (!value) return 0;
+        return Number(value.toString().replace(/[^0-9.-]/g, "")) || 0;
+    }
+
+    function futureValue(PV, r, n, annual) {
+        const growth = Math.pow(1 + r, n);
+        const fvPV = PV * growth;
+        const fvPMT = r > 0 ? annual * ((growth - 1) / r) : annual * n;
+        return fvPV + fvPMT;
+    }
+
+    // Fund 1
+    const f1PV = parseRM(document.getElementById("invFund1Value").value);
+    const f1R = Number(document.getElementById("invFund1Return").value) / 100;
+    const f1PMT = parseRM(document.getElementById("invFund1AnnualInv").value);
+    const f1N = Number(document.getElementById("invFund1Years").value);
+
+    const f1FV = futureValue(f1PV, f1R, f1N, f1PMT);
+    document.getElementById("invFund1Projected").textContent = formatRM(f1FV);
+
+    // Fund 2
+    const f2PV = parseRM(document.getElementById("invFund2Value").value);
+    const f2R = Number(document.getElementById("invFund2Return").value) / 100;
+    const f2PMT = parseRM(document.getElementById("invFund2AnnualInv").value);
+    const f2N = Number(document.getElementById("invFund2Years").value);
+
+    const f2FV = futureValue(f2PV, f2R, f2N, f2PMT);
+    document.getElementById("invFund2Projected").textContent = formatRM(f2FV);
+
+    // Total
+    const total = f1FV + f2FV;
+    document.getElementById("invTotalProjected").textContent = formatRM(total);
+
+    // Optional message
+    document.getElementById("invMessage").textContent =
+        "Based on your inputs, your combined investment projection is shown above.";
+
+    // Make sure result section is visible
+    document.getElementById("invResultsSection").classList.remove("hidden");
 }
 
 // Auto-run sync on load
@@ -656,51 +703,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const tabButtons = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
 
-  // 1. Remove active style from ALL tabs
   tabButtons.forEach(btn => {
     btn.classList.remove("active-tab", "border-blue-500");
     btn.classList.add("text-gray-500");
   });
 
-  // 2. Hide all tab contents
   tabContents.forEach(tc => tc.classList.add("hidden"));
 
-  // 3. Set DEFAULT active tab = Takaful
   const defaultTab = document.querySelector("[data-tab='takafulTab']");
   const defaultContent = document.getElementById("takafulTab");
 
-  // Highlight Takaful button
   defaultTab.classList.add("active-tab", "border-blue-500");
   defaultTab.classList.remove("text-gray-500");
 
-  // Show Takaful content
   defaultContent.classList.remove("hidden");
-
-  // 4. Set click behaviour
+  
   tabButtons.forEach(btn => 
   {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.tab;
-      // Reset all tabs
+      
       tabButtons.forEach(b => {
         b.classList.remove("active-tab", "border-blue-500");
         b.classList.add("text-gray-500");
       });
-      // Hide all contents
+
       tabContents.forEach(tc => tc.classList.add("hidden"));
-      // Activate clicked tab
+      
       btn.classList.add("active-tab", "border-blue-500");
       btn.classList.remove("text-gray-500");
-      // Show target content
+      
       document.getElementById(targetId).classList.remove("hidden");
       if (targetId === "tnaTab") {
         initializeTNAData();
-      // 2. Call the function when the TNA tab is clicked
       }
 
       if (targetId === "retirementTab") {
         initializeRetirementData();
-      // 2. Call the function when the Retirement tab is clicked
       }
     });
   });
