@@ -67,6 +67,10 @@ let wealthRatio = 0;
 let totalSalary = 0;
 let totalExpenses = 0;
 
+window.onload = () => {
+  localStorage.clear();
+};
+
 function calculate() {
   const salary = document.getElementById("salary").getRawValue() || 0;
   const otherIncome = document.getElementById("otherIncome").getRawValue() || 0;
