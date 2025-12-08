@@ -429,7 +429,6 @@ function updateLifeProtectionFromBase(selectedBase) {
   localStorage.setItem("lifeProtection", String(coverage));
 }
 
-
 function initializeTNAData() {
   const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
   const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0; 
@@ -485,20 +484,36 @@ function calculateNeeds() {
 
   const absGap = Math.abs(remainingGap);
   const resultElement = document.getElementById("remainingGap");
+  const gapLabel = document.getElementById("gapLabel");
 
   document.getElementById("totalNeeds").textContent = "RM " + Number(totalNeeds).toLocaleString();
   document.getElementById("totalAssetsCoverage").textContent = "RM " + Number(totalAssetsCoverage).toLocaleString();
-  resultElement.textContent = "RM " + Number(absGap).toLocaleString();
 
   resultElement.classList.remove('text-yellow-600', 'text-red-600', 'text-green-600', 'text-blue-600');
+
+  if (remainingGap > 0) {
+    gapLabel.textContent = "SHORTFALL";
+    resultElement.textContent = "RM " + Number(absGap).toLocaleString();
+    resultElement.classList.add("text-red-600");
+
+  } else if (remainingGap < 0) {
+    gapLabel.textContent = "SURPLUS";
+    resultElement.textContent = "RM " + Number(absGap).toLocaleString();
+    resultElement.classList.add("text-green-600");
+
+  } else {
+    gapLabel.textContent = "Balanced";
+    resultElement.textContent = "RM 0";
+    resultElement.classList.add("text-blue-600");
+  }
 
   let statusMessage = '';
   if (remainingGap > 0) {
     resultElement.classList.add('text-red-600');
-    statusMessage = `You have a financial **shortfall** of RM ${Number(absGap).toLocaleString()}. Consider increasing your coverage.`;
+    statusMessage = `You have a financial SHORTFALL of RM ${Number(absGap).toLocaleString()}. Consider increasing your coverage.`;
   } else if (remainingGap < 0) {
     resultElement.classList.add('text-green-600');
-    statusMessage = `You have a financial **surplus** of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
+    statusMessage = `You have a financial SURPLUS of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
   } else {
     resultElement.classList.add('text-blue-600');
     statusMessage = `Your needs and coverage are perfectly balanced!`;
@@ -572,6 +587,7 @@ function calculateRetirement() {
   document.getElementById("retFundNeeded").textContent = formatRM(retirementFundNeeded);
   document.getElementById("retFundAvailable").textContent = formatRM(projectedAvailableFund);
 
+  const gapLabelRet = document.getElementById("gapLabelRet");
   const gapElement = document.getElementById("retGap");
   const messageElement = document.getElementById("retGapMessage");
   
@@ -579,15 +595,18 @@ function calculateRetirement() {
 
   let message = "";
   if (retirementGap > 0) {
+    gapLabelRet.textContent = "SHORTFALL";
     gapElement.classList.add("text-pink-600");
-    gapElement.textContent = "- " + formatRM(absGap); message = `You have a projected shortfall of <strong>${formatRM(absGap)}</strong>.<br>Consider increasing your EPF contributions or additional investments.`;
+    gapElement.textContent = "- " + formatRM(absGap); message = `You have a projected SHORTFALL of <strong>${formatRM(absGap)}</strong>.<br>Consider increasing your EPF contributions or additional investments.`;
   }
   else if (retirementGap < 0) {
+    gapLabelRet.textContent = "SURPLUS";
     gapElement.classList.add("text-green-600");
     gapElement.textContent = "+ " + formatRM(absGap);
-    message = `Great job! You have a projected surplus of <strong>${formatRM(absGap)}</strong>.<br>Your retirement plan is on track.`;
+    message = `Great job! You have a projected SURPLUS of <strong>${formatRM(absGap)}</strong>.<br>Your retirement plan is on track.`;
   } 
   else {
+    gapLabelRet.textContent = "EQUAL";
     gapElement.classList.add("text-blue-600");
     gapElement.textContent = "RM 0.00";
     message = `Your projected funds match your estimated needs.`;
@@ -596,7 +615,7 @@ function calculateRetirement() {
   
   const resultsSection = document.getElementById("retResultsSection");
   if (resultsSection) resultsSection.classList.remove("hidden");
-  }
+}
 
 function initializeRetirementData() {
   const storedMonthlySalary = parseFloat(localStorage.getItem("totalSalary") || "0") || 0;
