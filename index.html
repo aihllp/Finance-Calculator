@@ -14,38 +14,38 @@
   <div class="max-w-5xl mx-auto px-6">
     <main>
       <div class="text-center mb-6">
-      <p class="mt-20"></p>
-      <h1 class="text-2xl font-bold">What are these terms?</h1>
-      <p class="text-sm text-gray-500 mt-1">Tap on each card to learn how it affects your financial health.</p>
-    </div>
+        <p class="mt-20"></p>
+        <h1 class="text-2xl font-bold">What are these terms?</h1>
+        <p class="text-sm text-gray-500 mt-1">Tap on each card to learn how it affects your financial health.</p>
+      </div>
 
-    <div class="cards-container">
-      <div class="card" onclick="this.classList.toggle('active')">
-        <div class="card-title">Cashflow</div>
-        <div class="card-description">Cashflow is the money moving in and out of your pocket. Positive cashflow means you're earning more than you spend.</div>
+      <div class="cards-container">
+        <div class="card" onclick="this.classList.toggle('active')">
+          <div class="card-title">Cashflow</div>
+          <div class="card-description">Cashflow is the money moving in and out of your pocket. Positive cashflow means you're earning more than you spend.</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('active')">
+          <div class="card-title">Net Worth</div>
+          <div class="card-description">Net worth is what you own (assets) minus what you owe (liabilities). A positive net worth means your assets exceed your debts.</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('active')">
+          <div class="card-title">Wealth Ratio</div>
+          <div class="card-description">Wealth ratio compares your net worth to your expenses. A higher ratio indicates better financial health.</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('active')">
+          <div class="card-title">Savings Ratio</div>
+          <div class="card-description">Savings ratio shows how much of your income you save after expenses. The higher, the better for your financial stability.</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('active')">
+          <div class="card-title">Liquidity Ratio</div>
+          <div class="card-description">Liquidity ratio measures how easily you can cover expenses using your savings.</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('active')">
+          <div class="card-title">Debt Service Ratio</div>
+          <div class="card-description">Debt service ratio shows what portion of your income goes to repaying loans. Keep it below 35% for financial health.</div>
+        </div>
       </div>
-      <div class="card" onclick="this.classList.toggle('active')">
-        <div class="card-title">Net Worth</div>
-        <div class="card-description">Net worth is what you own (assets) minus what you owe (liabilities). A positive net worth means your assets exceed your debts.</div>
-      </div>
-      <div class="card" onclick="this.classList.toggle('active')">
-        <div class="card-title">Wealth Ratio</div>
-        <div class="card-description">Wealth ratio compares your net worth to your expenses. A higher ratio indicates better financial health.</div>
-      </div>
-      <div class="card" onclick="this.classList.toggle('active')">
-        <div class="card-title">Savings Ratio</div>
-        <div class="card-description">Savings ratio shows how much of your income you save after expenses. The higher, the better for your financial stability.</div>
-      </div>
-      <div class="card" onclick="this.classList.toggle('active')">
-        <div class="card-title">Liquidity Ratio</div>
-        <div class="card-description">Liquidity ratio measures how easily you can cover expenses using your savings.</div>
-      </div>
-      <div class="card" onclick="this.classList.toggle('active')">
-        <div class="card-title">Debt Service Ratio</div>
-        <div class="card-description">Debt service ratio shows what portion of your income goes to repaying loans. Keep it below 35% for financial health.</div>
-      </div>
-    </div>
-  </main>
+    </main>
 
     <!-- header -->
     <div class="text-center mb-6">
@@ -193,7 +193,7 @@
 
       <!-- calculate button -->
       <div class="mt-6 text-center">
-        <button onclick="calculate()" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">Calculate</button>
+        <button id="calculateBtn" onclick="calculate()" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">Calculate</button>
       </div>
 
       <div class="text-center text-xs text-gray-400 mt-6">
@@ -300,522 +300,485 @@
           </div>
         </div>
 
-      </div> <!-- end resultsSection -->
+      </div> <!-- end result section -->
     </div> <!-- end space-y-10 -->
 
-      <!-- === CALCULATOR TABS SECTION === -->
+    <!-- tabs section -->
     <section id="calculatorTabs" class="mt-10 w-full max-w-4xl mx-auto bg-white shadow-md rounded-2xl p-6">
 
-      <!-- Tabs Header -->
+      <!-- tabs header -->
       <div class="flex justify-center space-x-3 border-b border-gray-200 mb-4">
-        <button class="tab-btn active-tab px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500"
-                data-tab="takafulTab">Basic Takaful Calculation</button>
-        <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500"
-                data-tab="tnaTab">Total Need Analysis</button>
-        <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500"
-                data-tab="retirementTab">Retirement</button>
-        <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500"
-                data-tab="investmentTab">Investment</button>
-        <!-- <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500"
-                data-tab="childrenFundTab">Children Fund</button> -->
+        <button class="tab-btn active-tab px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500" data-tab="takafulTab">Basic Takaful Calculation</button>
+        <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500" data-tab="tnaTab">Total Need Analysis</button>
+        <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500" data-tab="retirementTab">Retirement</button>
+        <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500" data-tab="investmentTab">Investment</button>
+        <!-- <button class="tab-btn px-4 py-2 font-medium text-gray-700 border-b-2 border-blue-500" data-tab="childrenFundTab">Children Fund</button> -->
       </div>
 
       <!-- Tabs Content -->
       <div id="takafulTab" class="tab-content hidden">
         <div id="takafulSection" class="mt-2 animate-fadeIn show">
-            <div class="bg-white takaful-card p-8">
-                
-              <header class="text-center mb-8 animate-fadeIn">
-                  <h1 class="text-2xl font-bold text-blue-700">Takaful Coverage Calculator</h1>
-                  <p class="text-gray-600 mt-2">Discover your estimated coverage based on your financial data</p>
-              </header>
+          <div class="bg-white takaful-card p-8">
+            <header class="text-center mb-8 animate-fadeIn">
+              <h1 class="text-2xl font-bold text-blue-700">Takaful Coverage Calculator</h1>
+              <p class="text-gray-600 mt-2">Discover your estimated coverage based on your financial data</p>
+            </header>
 
-              <div class="w-full max-w-5xl mx-auto bg-gray-50 rounded-2xl shadow p-8 mt-20 mb-10">
-                <h3 class="text-2xl font-bold text-blue-700 mb-2 text-center">Financial Summary</h3>
-                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                    <div class="p-3 border-r border-gray-200">
-                      <p class="text-gray-700 text-lg">Monthly Salary:</p>
-                        <span id="salaryText" class="text-xl font-semibold text-blue-600"></span>
-                        </div>
-                        <div class="p-3 border-r border-gray-200">
-                          <p class="text-gray-700 text-lg">Monthly Expenses:</p>
-                          <span id="expensesText" class="text-xl font-semibold text-blue-600"></span>
-                        </div>
-                        <div class="p-3">
-                            <p class="text-gray-700 text-lg">Net Savings:</p>
-                            <span id="netText" class="text-xl font-semibold text-blue-600"></span>
-                        </div>
-                    </div>
+            <div class="w-full max-w-5xl mx-auto bg-gray-50 rounded-2xl shadow p-8 mt-20 mb-10">
+              <h3 class="text-2xl font-bold text-blue-700 mb-2 text-center">Financial Summary</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                <div class="p-3 border-r border-gray-200">
+                  <p class="text-gray-700 text-lg">Monthly Salary:</p>
+                  <span id="salaryText" class="text-xl font-semibold text-blue-600"></span>
                 </div>
-
-                <div id="resultSectionTakaful" class="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-inner p-8 animate-fadeIn">
-                    
-                    <div class="text-center mt-20 mb-10">
-                        <h3 class="text-2xl font-bold text-blue-700 mb-4">Select Coverage Period</h3>
-                        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                            <button id="oneYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform flex-1">
-                                <h2 class="text-xl font-semibold text-blue-600">1-Year Coverage</h2>
-                                <p class="text-gray-500 mt-2">Short-term coverage with flexible payment</p>
-                            </button>
-                            <button id="fiveYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform flex-1">
-                                <h2 class="text-xl font-semibold text-blue-600">5-Year Coverage</h2>
-                                <p class="text-gray-500 mt-2">Medium-term coverage with better benefits</p>
-                            </button>
-                            <button id="tenYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform flex-1">
-                                <h2 class="text-xl font-semibold text-blue-600">10-Year Coverage</h2>
-                                <p class="text-gray-500 mt-2">Long-term financial security for your family</p>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center">
-                        <h3 class="text-2xl font-bold text-blue-700 mt-20 mb-4">Estimated Takaful Coverage</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4"> 
-                            <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
-                                <h4 class="text-lg font-semibold text-blue-700 mb-1">Income Based</h4>
-                                <p id="coverageIncome" class="text-2xl font-bold text-blue-600">-</p>
-                            </div>
-                            <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
-                                <h4 class="text-lg font-semibold text-blue-700 mb-1">Expenses Based</h4>
-                                <p id="coverageExpenses" class="text-2xl font-bold text-blue-600">-</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center italic text-xs text-gray-400 mt-60 pt-4 border-t border-gray-200">
-                      <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
-                        There is no guarantee of accuracy and projections are based on your input in the respective fields.
-                        The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
-                        The calculator is provided to you at no cost and is general in nature.
-                        It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
-                        We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
-                        You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
-                      </p>
-                    </div>
-                
+                <div class="p-3 border-r border-gray-200">
+                  <p class="text-gray-700 text-lg">Monthly Expenses:</p>
+                  <span id="expensesText" class="text-xl font-semibold text-blue-600"></span>
                 </div>
-                
+                <div class="p-3 border-r border-gray-200">
+                  <p class="text-gray-700 text-lg">Net Savings:</p>
+                  <span id="netText" class="text-xl font-semibold text-blue-600"></span>
+                </div>
+              </div>
             </div>
+
+            <div id="resultSectionTakaful" class="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-inner p-8 animate-fadeIn">
+              <div class="text-center mt-20 mb-10">
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Select Coverage Period</h3>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                  <button id="oneYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform flex-1">
+                    <h2 class="text-xl font-semibold text-blue-600">1-Year Coverage</h2>
+                    <p class="text-gray-500 mt-2">Short-term coverage with flexible payment</p>
+                  </button>
+                  <button id="fiveYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform flex-1">
+                    <h2 class="text-xl font-semibold text-blue-600">5-Year Coverage</h2>
+                    <p class="text-gray-500 mt-2">Medium-term coverage with better benefits</p>
+                  </button>
+                  <button id="tenYear" class="coverage-card bg-white rounded-2xl shadow p-5 text-center hover:scale-105 transition-transform flex-1">
+                    <h2 class="text-xl font-semibold text-blue-600">10-Year Coverage</h2>
+                    <p class="text-gray-500 mt-2">Long-term financial security for your family</p>
+                  </button>
+                </div>
+              </div>
+                    
+              <div class="text-center">
+                <h3 class="text-2xl font-bold text-blue-700 mt-20 mb-4">Estimated Takaful Coverage</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4"> 
+                  <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
+                    <h4 class="text-lg font-semibold text-blue-700 mb-1">Income Based</h4>
+                    <p id="coverageIncome" class="text-2xl font-bold text-blue-600">-</p>
+                  </div>
+                  <div class="bg-blue-50 p-4 rounded-xl shadow-inner">
+                    <h4 class="text-lg font-semibold text-blue-700 mb-1">Expenses Based</h4>
+                    <p id="coverageExpenses" class="text-2xl font-bold text-blue-600">-</p>
+                  </div>
+                </div>
+              </div>
+                    
+              <div class="text-center italic text-xs text-gray-400 mt-60 pt-4 border-t border-gray-200">
+                <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
+                  There is no guarantee of accuracy and projections are based on your input in the respective fields.
+                  The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
+                  The calculator is provided to you at no cost and is general in nature.
+                  It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
+                  We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
+                  You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
+                </p>
+              </div>      
+            </div> <!--end result section-->      
+          </div>
         </div>
-    </div>
+      </div>
 
-  <div id="tnaTab" class="tab-content hidden">
-    
-    <div class="text-center mt-8 animate-fadeIn show">
-        <p class="mt-5"></p>
-        <h1 class="text-2xl font-bold text-blue-700">Total Need Analysis Calculator</h1>
-        <p class="text-sm text-gray-500 mt-1">Estimate your total financial protection needs and coverage gap</p>
-    </div>
+      <div id="tnaTab" class="tab-content hidden">
+        <div class="text-center mt-8 animate-fadeIn show">
+          <p class="mt-5"></p>
+          <h1 class="text-2xl font-bold text-blue-700">Total Need Analysis Calculator</h1>
+          <p class="text-sm text-gray-500 mt-1">Estimate your total financial protection needs and coverage gap</p>
+        </div>
 
-    <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20 mt-5 max-w-4xl mx-auto">
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
+        <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20 mt-5 max-w-4xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
             <div class="lg:col-span-1">
-                <div class="grid grid-cols-1 gap-6 mb-8">
-                    
-                    <div data-aos="fade-up" data-aos-delay="100" class="flex flex-col">
-                      <h3 class="text-lg font-semibold text-blue-700 mb-1">What You Need</h3>
-                        <div class="flex items-center space-x-4 mb-2">
-                            <label for="protectionType" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Life Protection Base</label>
-                            <select id="protectionType" class="w-full p-2 rounded-lg bg-white/60 border focus:ring-2 focus:ring-blue-300 flex-1">
-                                <option value="">Select base type</option>
-                                <option value="income">Based on Income</option>
-                                <option value="expenses">Based on Expenses</option>
-                            </select>
-                        </div>
+              <div class="grid grid-cols-1 gap-6 mb-8">
+
+                <div data-aos="fade-up" data-aos-delay="100" class="flex flex-col">
+                  <h3 class="text-lg font-semibold text-blue-700 mb-1">What You Need</h3>
+                  <div class="flex items-center space-x-4 mb-2">
+                    <label for="protectionType" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Life Protection Base</label>
+                    <select id="protectionType" class="w-full p-2 rounded-lg bg-white/60 border focus:ring-2 focus:ring-blue-300 flex-1">
+                      <option value="">Select base type</option>
+                      <option value="income">Based on Income</option>
+                      <option value="expenses">Based on Expenses</option>
+                    </select>
+                  </div>
                         
-                        <div class="flex items-center space-x-4 mb-1">
-                            <label for="lifeProtection" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Coverage Amount (RM)</label>
-                            <input id="lifeProtection" type="text" readonly class="w-full p-2 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-semibold focus:ring-0 cursor-not-allowed flex-1" placeholder="Calculated automatically">
-                        </div>
-                        
-                        <p class="text-gray-700 text-xs leading-relaxed mb-1">Choose whether to base on income or expenses (10 years coverage).</p>
-                    </div>
-
-                    <div data-aos="fade-up" data-aos-delay="100">
-                        <div class="flex items-center space-x-4 mb-1">
-                            <label for="existingLiabilities" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Existing Liabilities (RM)</label>
-                            <input id="existingLiabilities" type="text" readonly class="num-input w-full p-2 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-semibold focus:ring-0 cursor-not-allowed flex-1" placeholder="e.g. 200,000">
-                        </div>
-                        <p class="text-gray-700 text-xs leading-relaxed mt-1">Automatically retrieved from your previous calculation.</p>
-                    </div>
-
-                    <div data-aos="fade-up" data-aos-delay="100">
-                        <div class="flex items-center space-x-4 mb-2">
-                            <label for="estimatedChildEducation" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Child Education (RM)</label>
-                            <input id="estimatedChildEducation" type="text" class="num-input w-full p-2 rounded-lg bg-white/60 border focus:ring-2 focus:ring-blue-300 flex-1" placeholder="e.g. 300,000">
-                        </div>
-                        <p class="text-gray-700 text-xs leading-relaxed mb-3 mt-1">Fund prepared for your children's education expenses.</p>
-                    </div>
-
-                    <div data-aos="fade-up" data-aos-delay="200">
-                      <h3 class="text-lg font-semibold text-blue-600 mb-1">What You Have</h3>
-                        <div class="flex items-center space-x-4 mb-1">
-                            <label for="tnaTotalAssetsInput" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Available Assets (RM)</label>
-                            <input id="tnaTotalAssetsInput" type="text" readonly class="w-full p-2 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-semibold focus:ring-0 cursor-not-allowed flex-1">
-                        </div>
-                        <p class="text-gray-700 text-xs leading-relaxed mt-1">Automatically retrieved from your previous calculation.</p>
-                    </div>
-                    
-                    <div data-aos="fade-up" data-aos-delay="200">
-                        <div class="flex items-center space-x-4 mb-1">
-                            <label for="life" class="flex-shrink-0 text-gray-700 text-sm w-2/5 text-left font-bold">Existing Life Coverage (RM)</label>
-                            <input id="life" type="text" class="num-input w-full p-2 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300 flex-1" placeholder="e.g. 150,000">
-                        </div>
-                        <p class="text-gray-700 text-xs leading-relaxed mb-3 mt-1">Include your current insurance, takaful, or protection plan coverage.</p>
-                    </div>
-                    
+                  <div class="flex items-center space-x-4 mb-1">
+                    <label for="lifeProtection" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Coverage Amount (RM)</label>
+                    <input id="lifeProtection" type="text" readonly class="w-full p-2 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-semibold focus:ring-0 cursor-not-allowed flex-1" placeholder="Calculated automatically">
+                  </div>
+                  <p class="text-gray-700 text-xs leading-relaxed mb-1">Choose whether to base on income or expenses (10 years coverage).</p>
                 </div>
-                <div class="mt-6 text-center pt-8 border-t border-gray-200">
-                    <button onclick="calculateNeeds()" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">Calculate Total Needs</button>
+
+                <div data-aos="fade-up" data-aos-delay="100">
+                  <div class="flex items-center space-x-4 mb-1">
+                    <label for="existingLiabilities" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Existing Liabilities (RM)</label>
+                    <input id="existingLiabilities" type="text" readonly class="num-input w-full p-2 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-semibold focus:ring-0 cursor-not-allowed flex-1" placeholder="e.g. 200,000">
+                  </div>
+                  <p class="text-gray-700 text-xs leading-relaxed mt-1">Automatically retrieved from your previous calculation.</p>
                 </div>
+
+                <div data-aos="fade-up" data-aos-delay="100">
+                  <div class="flex items-center space-x-4 mb-2">
+                    <label for="estimatedChildEducation" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Child Education (RM)</label>
+                    <input id="estimatedChildEducation" type="text" class="num-input w-full p-2 rounded-lg bg-white/60 border focus:ring-2 focus:ring-blue-300 flex-1" placeholder="e.g. 300,000">
+                  </div>
+                  <p class="text-gray-700 text-xs leading-relaxed mb-3 mt-1">Fund prepared for your children's education expenses.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="200">
+                  <h3 class="text-lg font-semibold text-blue-600 mb-1">What You Have</h3>
+                  <div class="flex items-center space-x-4 mb-1">
+                    <label for="tnaTotalAssetsInput" class="flex-shrink-0 font-bold text-gray-700 text-sm w-2/5 text-left">Available Assets (RM)</label>
+                    <input id="tnaTotalAssetsInput" type="text" readonly class="w-full p-2 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-semibold focus:ring-0 cursor-not-allowed flex-1">
+                  </div>
+                  <p class="text-gray-700 text-xs leading-relaxed mt-1">Automatically retrieved from your previous calculation.</p>
+                </div>
+                    
+                <div data-aos="fade-up" data-aos-delay="200">
+                  <div class="flex items-center space-x-4 mb-1">
+                    <label for="life" class="flex-shrink-0 text-gray-700 text-sm w-2/5 text-left font-bold">Existing Life Coverage (RM)</label>
+                    <input id="life" type="text" class="num-input w-full p-2 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300 flex-1" placeholder="e.g. 150,000">
+                  </div>
+                  <p class="text-gray-700 text-xs leading-relaxed mb-3 mt-1">Include your current insurance, takaful, or protection plan coverage.</p>
+                </div>
+              </div>
+
+              <div class="mt-6 text-center pt-8 border-t border-gray-200">
+                <button onclick="calculateNeeds()" class="bg-indigo-700 text-white px-8 py-3 rounded-xl shadow hover:bg-indigo-800 transition">Calculate Total Needs</button>
+              </div>
             </div>
             
-            <div class="lg:col-span-1 lg:border-l lg:pl-6 pt-6 lg:pt-0">
-                
-                <div id="resultsSection" class="transition-all duration-700 ease-in-out">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                        <h3 class="text-lg font-semibold mb-4">Result Summary</h3>
-                        <div class="grid grid-cols-1 gap-4"> 
-                            <div class="bg-blue-50 rounded-xl p-4">
-                                <p class="text-gray-500 text-sm">Total Needs</p>
-                                <p id="totalNeeds" class="text-2xl font-bold text-blue-600">RM0</p>
-                            </div>
-                            <div class="bg-green-50 rounded-xl p-4">
-                                <p class="text-gray-500 text-sm">Total Assets + Coverage</p>
-                                <p id="totalAssetsCoverage" class="text-2xl font-bold text-green-600">RM0</p>
-                            </div>
-                            <div class="bg-yellow-50 rounded-xl p-4">
-                                <p id="gapLabel" class="text-gray-500 text-sm">Surplus/Shortfall</p>
-                                <p id="remainingGap" class="text-2xl font-bold text-yellow-600">RM0</p>
-                            </div>
-                        </div>
-                        <p id="gapMessage" class="mt-6 text-gray-700 text-sm font-medium"></p>
+            <div class="lg:col-span-1 lg:border-l lg:pl-6 pt-6 lg:pt-0">  
+              <div id="resultsSection" class="transition-all duration-700 ease-in-out">
+                <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                  <h3 class="text-lg font-semibold mb-4">Result Summary</h3>
+                  <div class="grid grid-cols-1 gap-4"> 
+                    <div class="bg-blue-50 rounded-xl p-4">
+                      <p class="text-gray-500 text-sm">Total Needs</p>
+                      <p id="totalNeeds" class="text-2xl font-bold text-blue-600">RM0</p>
                     </div>
+                    <div class="bg-green-50 rounded-xl p-4">
+                      <p class="text-gray-500 text-sm">Total Assets + Coverage</p>
+                      <p id="totalAssetsCoverage" class="text-2xl font-bold text-green-600">RM0</p>
+                    </div>
+                    <div class="bg-yellow-50 rounded-xl p-4">
+                      <p id="gapLabel" class="text-gray-500 text-sm">Surplus/Shortfall</p>
+                      <p id="remainingGap" class="text-2xl font-bold text-yellow-600">RM0</p>
+                    </div>
+                  </div>
+                  <p id="gapMessage" class="mt-6 text-gray-700 text-sm font-medium"></p>
                 </div>
+              </div>
 
-                <div class="text-center italic text-xs text-gray-400 mb-60 mt-6 pt-4 border-t border-gray-200">
-                  <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
-                    There is no guarantee of accuracy and projections are based on your input in the respective fields.
-                    The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
-                    The calculator is provided to you at no cost and is general in nature.
-                    It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
-                    We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
-                    You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
-                  </p>
-                </div>
+              <div class="text-center italic text-xs text-gray-400 mb-60 mt-6 pt-4 border-t border-gray-200">
+                <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
+                  There is no guarantee of accuracy and projections are based on your input in the respective fields.
+                  The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
+                  The calculator is provided to you at no cost and is general in nature.
+                  It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
+                  We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
+                  You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
+                </p>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+
+      <div id="retirementTab" class="tab-content hidden">
+        <div class="text-center mt-8 animate-fadeIn show">
+          <h1 class="text-2xl font-bold text-blue-700">Retirement Planning Calculator</h1>
+          <p class="text-sm text-gray-500 mt-1">Calculate Shortfall/Surplus based on your specific retirement goals</p>
         </div>
-    </div>
 
-    <div id="retirementTab" class="tab-content hidden">
-    
-    <div class="text-center mt-8 animate-fadeIn show">
-        <h1 class="text-2xl font-bold text-blue-700">Retirement Planning Calculator</h1>
-        <p class="text-sm text-gray-500 mt-1">Calculate Shortfall/Surplus based on your specific retirement goals</p>
-    </div>
-
-    <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20 mt-8 max-w-4xl mx-auto">
-        
-        <div class="mb-5 border-b border-gray-200 pb-6">
+        <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20 mt-8 max-w-4xl mx-auto">
+          <div class="mb-5 border-b border-gray-200 pb-6">
             <h2 class="text-xl font-bold text-purple-800 mb-4 flex items-center">
-                <span class="bg-purple-100 text-purple-700 py-1 px-3 rounded-lg text-sm mr-3">Part 1</span> 
-                Retirement Fund Needed
-            </h2>
+              <span class="bg-purple-100 text-purple-700 py-1 px-3 rounded-lg text-sm mr-3">Part 1</span>Retirement Fund Needed</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <h3 class="font-semibold text-gray-700">Time Horizon</h3>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Current Age</label>
-                        <input id="retCurrentAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" placeholder="e.g. 30">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Retirement Age</label>
-                        <input id="retAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="55">
-                        <p class="text-xs text-gray-500 mt-1">You can enter 55 to 60 years old (Reference: KWSP Withdrawal Age)</p>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Max Age (Life Expectancy)</label>
-                        <input id="maxAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="85">
-                        <p class="text-xs text-gray-500 mt-1">You can enter 70 to 100 years old (Reference: DOSM)</p>
-                    </div>
+              <div class="space-y-4">
+                <h3 class="font-semibold text-gray-700">Time Horizon</h3>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Current Age</label>
+                  <input id="retCurrentAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" placeholder="e.g. 30">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Retirement Age</label>
+                  <input id="retAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="55">
+                  <p class="text-xs text-gray-500 mt-1">You can enter 55 to 60 years old (Reference: KWSP Withdrawal Age)</p>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Max Age (Life Expectancy)</label>
+                  <input id="maxAge" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="85">
+                  <p class="text-xs text-gray-500 mt-1">You can enter 70 to 100 years old (Reference: DOSM)</p>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <h3 class="font-semibold text-gray-700">Expenses & Assumptions</h3>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Annual Current Salary (RM)</label>
+                  <input id="retCurrentSalary" type="text" readonly class="num-input w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
+                  <p class="text-xs text-gray-500 mt-1">Retrieved from Income section</p>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">% of Salary Needed</label>
+                  <input id="annualExpPct" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="60">
+                  <p class="text-xs text-gray-500 mt-1">Projected Annual Expenses (Default 60%)</p>
                 </div>
 
-                <div class="space-y-4">
-                    <h3 class="font-semibold text-gray-700">Expenses & Assumptions</h3>
-                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Annual Current Salary (RM)</label>
-                        <input id="retCurrentSalary" type="text" readonly class="num-input w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
-                        <p class="text-xs text-gray-500 mt-1">Retrieved from Income section</p>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">% of Salary Needed</label>
-                        <input id="annualExpPct" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="60">
-                        <p class="text-xs text-gray-500 mt-1">Projected Annual Expenses (Default 60%)</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Inflation (%)</label>
-                            <input id="inflationRateRet" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="3">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fund Return (%)</label>
-                            <input id="retInvReturn" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="4">
-                            <p class="text-xs text-gray-500 mt-1">During retirement phase</p>
-                        </div>
-                    </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Inflation (%)</label>
+                    <input id="inflationRateRet" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="3">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fund Return (%)</label>
+                    <input id="retInvReturn" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-purple-300" value="4">
+                    <p class="text-xs text-gray-500 mt-1">During retirement phase</p>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <div>
-             <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
-                <span class="bg-indigo-100 text-indigo-700 py-1 px-3 rounded-lg text-sm mr-3">Part 2</span> 
-                Projected Available Funds
-            </h2>
-
+          <div>
+            <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+              <span class="bg-indigo-100 text-indigo-700 py-1 px-3 rounded-lg text-sm mr-3">Part 2</span> 
+                Projected Available Funds</h2>
             <div class="bg-indigo-50 rounded-xl p-6 mb-6">
-                <h3 class="font-bold text-indigo-700 mb-4 border-b border-indigo-200 pb-2">1. EPF Projection</h3>
-                  <p class="text-xs text-gray-500 mt-1 mb-5">This calculator is to calculate projected value of EPF fund based on existing EPF funds and total annual contributions.</p>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Existing EPF (RM)</label>
-                        <input id="retCurrentFund" type="text" readonly class="num-input w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
-                    </div>
-                    <div>
-                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Est. EPF Return (%)</label>
-                         <input id="epfReturn" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" value="5">
-                    </div>
-                    <div>
-                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Total Annual EPF Contribution (RM)</label>
-                         <input id="annualEpfContribution" type="text" class="num-input w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 12,000">
-                    </div>
-                    <div>
-                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Salary Increment (%)</label>
-                         <input id="salaryIncrementRate" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" value="3">
-                    </div>
+              <h3 class="font-bold text-indigo-700 mb-4 border-b border-indigo-200 pb-2">1. EPF Projection</h3>
+              <p class="text-xs text-gray-500 mt-1 mb-5">This calculator is to calculate projected value of EPF fund based on existing EPF funds and total annual contributions.</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Existing EPF (RM)</label>
+                  <input id="retCurrentFund" type="text" readonly class="num-input w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 font-bold cursor-not-allowed">
                 </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Est. EPF Return (%)</label>
+                  <input id="epfReturn" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" value="5">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Total Annual EPF Contribution (RM)</label>
+                  <input id="annualEpfContribution" type="text" class="num-input w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 12,000">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Salary Increment (%)</label>
+                  <input id="salaryIncrementRate" type="number" class="w-full p-3 rounded-lg bg-white/60 border focus:ring-2 focus:ring-indigo-300" value="3">
+                </div>
+              </div>
             </div>
 
             <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                <h3 class="font-bold text-gray-700 mb-4 border-b border-gray-100 pb-2">2. Other Funds Projection For Retirement</h3>
+              <h3 class="font-bold text-gray-700 mb-4 border-b border-gray-100 pb-2">2. Other Funds Projection For Retirement</h3>
                 
-                <div class="hidden md:grid grid-cols-4 gap-4 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    <div>Current Fund Value</div>
-                    <div>Regular Investment (Annual)</div>
-                    <div>Est. Return</div>
-                    <div>Projected Value</div>
-                </div>
+              <div class="hidden md:grid grid-cols-4 gap-4 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                <div>Current Fund Value</div>
+                <div>Regular Investment (Annual)</div>
+                <div>Est. Return</div>
+                <div>Projected Value</div>
+              </div>
 
-                <div class="mb-4">
-                    <p class="md:hidden text-xs font-bold text-gray-400 mb-1">Fund 1</p>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Fund 1 Current Value (RM)</label>
-                             <input id="fund1Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
-                        </div>
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
-                             <input id="fund1AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
-                        </div>
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Return (%)</label>
-                             <input id="fund1Return" type="number" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
-                        </div>
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Projected Value Fund 1</label>
-                             <p id="fund1ProjectedValue" type="text" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
-                        </div>
-                    </div>
+              <div class="mb-4">
+                <p class="md:hidden text-xs font-bold text-gray-400 mb-1">Fund 1</p>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Fund 1 Current Value (RM)</label>
+                    <input id="fund1Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
+                  </div>
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
+                    <input id="fund1AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
+                  </div>
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Return (%)</label>
+                    <input id="fund1Return" type="number" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
+                  </div>
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Projected Value Fund 1</label>
+                    <p id="fund1ProjectedValue" type="text" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
+                  </div>
                 </div>
+              </div>
 
-                <div>
-                    <p class="md:hidden text-xs font-bold text-gray-400 mb-1">Fund 2</p>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Fund 2 Current Value (RM)</label>
-                             <input id="fund2Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
-                        </div>
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
-                             <input id="fund2AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
-                        </div>
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Return (%)</label>
-                             <input id="fund2Return" type="number" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
-                        </div>
-                        <div class="relative">
-                             <label class="md:hidden text-xs text-gray-500">Projected Value Fund 2</label>
-                             <p id="fund2ProjectedValue" type="text" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
-                        </div>
-                    </div>
+              <div>
+                <p class="md:hidden text-xs font-bold text-gray-400 mb-1">Fund 2</p>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Fund 2 Current Value (RM)</label>
+                    <input id="fund2Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
+                  </div>
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
+                    <input id="fund2AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
+                  </div>
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Return (%)</label>
+                    <input id="fund2Return" type="number" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
+                  </div>
+                  <div class="relative">
+                    <label class="md:hidden text-xs text-gray-500">Projected Value Fund 2</label>
+                    <p id="fund2ProjectedValue" type="text" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
 
-        </div>
-
-        <div class="mt-8 text-center">
+          <div class="mt-8 text-center">
             <button onclick="calculateRetirement()" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-10 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all font-bold text-lg">
                 Calculate Shortfall / Surplus
             </button>
-        </div>
+          </div>
 
-        <div id="retResultsSection" class="transition-all duration-700 ease-in-out mt-5">
+          <div id="retResultsSection" class="transition-all duration-700 ease-in-out mt-5">
             <div class="bg-white rounded-2xl shadow-lg p-6 text-center border border-gray-100">
-                <h3 class="text-lg font-semibold mb-6 text-gray-800">Retirement Analysis Result</h3>
+              <h3 class="text-lg font-semibold mb-6 text-gray-800">Retirement Analysis Result</h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
-                    <div class="bg-purple-50 rounded-xl p-5 border border-purple-100">
-                        <p class="text-purple-600 text-xs font-bold uppercase tracking-wider mb-2">Fund Needed</p>
-                        <p id="retFundNeeded" class="text-2xl font-extrabold text-purple-700">RM0</p>
-                        <p class="text-xs text-gray-400 mt-2">At retirement age</p>
-                    </div>
-                    <div class="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
-                        <p class="text-indigo-600 text-xs font-bold uppercase tracking-wider mb-2">Projected Available</p>
-                        <p id="retFundAvailable" class="text-2xl font-extrabold text-indigo-700">RM0</p>
-                        <p class="text-xs text-gray-400 mt-2">EPF + Other Funds</p>
-                    </div>
-                    <div class="bg-pink-50 rounded-xl p-5 border border-pink-100 shadow-inner">
-                        <p id="gapLabelRet" class="text-pink-600 text-xs font-bold uppercase tracking-wider mb-2">Shortfall / Surplus</p>
-                        <p id="retGap" class="text-2xl font-extrabold text-pink-600">RM0</p>
-                        <p class="text-xs text-gray-400 mt-2">Objective Result</p>
-                    </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
+                <div class="bg-purple-50 rounded-xl p-5 border border-purple-100">
+                  <p class="text-purple-600 text-xs font-bold uppercase tracking-wider mb-2">Fund Needed</p>
+                  <p id="retFundNeeded" class="text-2xl font-extrabold text-purple-700">RM0</p>
+                  <p class="text-xs text-gray-400 mt-2">At retirement age</p>
                 </div>
+                <div class="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
+                  <p class="text-indigo-600 text-xs font-bold uppercase tracking-wider mb-2">Projected Available</p>
+                  <p id="retFundAvailable" class="text-2xl font-extrabold text-indigo-700">RM0</p>
+                  <p class="text-xs text-gray-400 mt-2">EPF + Other Funds</p>
+                </div>
+                <div class="bg-pink-50 rounded-xl p-5 border border-pink-100 shadow-inner">
+                  <p id="gapLabelRet" class="text-pink-600 text-xs font-bold uppercase tracking-wider mb-2">Shortfall / Surplus</p>
+                  <p id="retGap" class="text-2xl font-extrabold text-pink-600">RM0</p>
+                  <p class="text-xs text-gray-400 mt-2">Objective Result</p>
+                </div>
+              </div>
                 
-                <div class="mt-6 p-4 rounded-lg bg-gray-50">
-                    <p id="retGapMessage" class="text-gray-700 text-sm font-medium leading-relaxed"></p>
-                </div>
+              <div class="mt-6 p-4 rounded-lg bg-gray-50">
+                <p id="retGapMessage" class="text-gray-700 text-sm font-medium leading-relaxed"></p>
+              </div>
             </div>
+          </div>
+
+          <div class="text-center italic text-xs text-gray-400 mt-6 pt-4 border-t border-gray-200">
+            <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
+              There is no guarantee of accuracy and projections are based on your input in the respective fields.
+              The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
+              The calculator is provided to you at no cost and is general in nature.
+              It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
+              We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
+              You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="investmentTab" class="tab-content hidden">
+        <div class="text-center mt-8 animate-fadeIn show">
+          <h1 class="text-2xl font-bold text-blue-700">Investment Growth Calculator</h1>
+          <p class="text-sm text-gray-500 mt-1">Calculate Future Value using Compound Interest</p>
         </div>
 
-        <div class="text-center italic text-xs text-gray-400 mt-6 pt-4 border-t border-gray-200">
-          <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
-            There is no guarantee of accuracy and projections are based on your input in the respective fields.
-            The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
-            The calculator is provided to you at no cost and is general in nature.
-            It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
-            We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
-            You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
-          </p>
-        </div>
-
-    </div>
-</div>
-
-  <div id="investmentTab" class="tab-content hidden">
-
-    <div class="text-center mt-8 animate-fadeIn show">
-        <h1 class="text-2xl font-bold text-blue-700">Investment Growth Calculator</h1>
-        <p class="text-sm text-gray-500 mt-1">Calculate Future Value using Compound Interest</p>
-    </div>
-
-    <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20 mt-8 max-w-4xl mx-auto">
-      <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
-        <span class="bg-indigo-100 text-indigo-700 py-1 px-3 rounded-lg text-sm mr-3">Investment</span> 
-        Future Value Projection
-      </h2>
-
-      <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-        <h3 class="font-bold text-gray-700 mb-4 border-b border-gray-100 pb-2">Fund Projections</h3>
+        <div class="rounded-2xl shadow-lg p-8 bg-white/30 backdrop-blur-md border border-white/20 mt-8 max-w-4xl mx-auto">
+          <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+            <span class="bg-indigo-100 text-indigo-700 py-1 px-3 rounded-lg text-sm mr-3">Investment</span> 
+              Future Value Projection
+          </h2>
+          <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+            <h3 class="font-bold text-gray-700 mb-4 border-b border-gray-100 pb-2">Fund Projections</h3>
         
-        <div class="hidden md:grid grid-cols-5 gap-4 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
-          <div>Current Value</div>
-          <div>Regular Investment (Annual)</div>
-          <div>EST. Return</div>
-          <div>Years</div>
-          <div>Projected Value</div>
-        </div>
+            <div class="hidden md:grid grid-cols-5 gap-4 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
+              <div>Current Value</div>
+              <div>Regular Investment (Annual)</div>
+              <div>EST. Return</div>
+              <div>Years</div>
+              <div>Projected Value</div>
+            </div>
 
-        <div class="mb-4">
-          <p class="md:hidden text-sm font-bold text-gray-600 mb-1">Fund 1</p>
-              
-          <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Fund 1 Current Value (RM)</label>
-              <input id="invFund1Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
+            <div class="mb-4">
+              <p class="md:hidden text-sm font-bold text-gray-600 mb-1">Fund 1</p>
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Fund 1 Current Value (RM)</label>
+                  <input id="invFund1Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
+                </div>
+                <div>
+                  <label class= "md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
+                  <input id="invFund1AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
+                </div>
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Return (%)</label>
+                  <input id="invFund1Return" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
+                </div>
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Years</label>
+                  <input id="invFund1Years" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 20">
+                </div>
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Projected Value</label>
+                  <p id="invFund1Projected" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
+                </div>
+              </div>
+
+              <div class="flex justify-center">
+                <button onclick="calculateFund1()" class="bg-indigo-700 text-white px-4 py-2 rounded-xl shadow hover:bg-indigo-800 transition mt-2">Calculate Fund 1</button>
+              </div>
             </div>
 
             <div>
-              <label class= "md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
-              <input id="invFund1AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
-            </div>
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Return (%)</label>
-              <input id="invFund1Return" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
-            </div>
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Years</label>
-              <input id="invFund1Years" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 20">
-            </div>
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Projected Value</label>
-              <p id="invFund1Projected" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
-            </div>
-          </div>
-
-          <div class="flex justify-center">
-            <button onclick="calculateFund1()" class="bg-indigo-700 text-white px-4 py-2 rounded-xl shadow hover:bg-indigo-800 transition mt-2">Calculate Fund 1</button>
-          </div>
-
-        </div>
-
-        <div>
-          <p class="md:hidden text-sm font-bold text-gray-600 mb-1">Fund 2</p>
-
-          <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Fund 2 Current Value (RM)</label>
-              <input id="invFund2Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
-            </div>
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
-              <input id="invFund2AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
-            </div>
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Return (%)</label>
-              <input id="invFund2Return" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
-            </div>
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Years</label>
-              <input id="invFund2Years" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 20">
-            </div>
-
-            <div>
-              <label class="md:hidden text-xs text-gray-500">Projected Value</label>
-              <p id="invFund2Projected" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
-            </div>
-
-          </div>
+              <p class="md:hidden text-sm font-bold text-gray-600 mb-1">Fund 2</p>
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Fund 2 Current Value (RM)</label>
+                  <input id="invFund2Value" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 100,000">
+                </div>
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Regular Inv (RM)</label>
+                  <input id="invFund2AnnualInv" type="text" class="num-input w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 10,000">
+                </div>  
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Return (%)</label>
+                  <input id="invFund2Return" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="9">
+                </div>
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Years</label>
+                  <input id="invFund2Years" type="number" class="w-full p-2 rounded-lg bg-gray-20 border focus:ring-2 focus:ring-indigo-300" placeholder="e.g. 20">
+                </div>
+                <div>
+                  <label class="md:hidden text-xs text-gray-500">Projected Value</label>
+                  <p id="invFund2Projected" class="w-full p-2 rounded-lg bg-gray-50 border focus:ring-2 focus:ring-indigo-300 cursor-not-allowed">RM0</p>
+                </div>
+              </div>
           
-          <div class="flex justify-center">
-            <button onclick="calculateFund2()" class="bg-indigo-700 text-white px-4 py-2 rounded-xl shadow hover:bg-indigo-800 transition mt-2">Calculate Fund 2</button>
+              <div class="flex justify-center">
+                <button onclick="calculateFund2()" class="bg-indigo-700 text-white px-4 py-2 rounded-xl shadow hover:bg-indigo-800 transition mt-2">Calculate Fund 2</button>
+              </div>
+            </div>
           </div>
 
+          <div class="text-center italic text-xs text-gray-400 mt-6 pt-4 border-t border-gray-200">
+            <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
+                There is no guarantee of accuracy and projections are based on your input in the respective fields.
+                The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
+                The calculator is provided to you at no cost and is general in nature.
+                It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
+                We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
+                You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
+            </p>
+          </div>
         </div>
       </div>
-
-      <div class="text-center italic text-xs text-gray-400 mt-6 pt-4 border-t border-gray-200">
-        <p>Disclaimer: This calculator is provided as an educational and informational purpose only.
-            There is no guarantee of accuracy and projections are based on your input in the respective fields.
-            The actual financial outcome you you may experience could be lower or higher than the amount shown in this calculator.
-            The calculator is provided to you at no cost and is general in nature.
-            It is not intended as investment advice or a substitute for obtaining financial advice from licensed financial adviser.
-            We make no representation and assume no responsibility for the accuracy of information contained in this calculator, or its suitability for any purpose, and such information is subject to changes without notice.
-            You are encouraged to verify any information obtained here with other sources, and review all details regarding any financial situation with your financial adviser.
-        </p>
-      </div>
-
-    </div>
-  </div>
 
 
   <!-- <div id="childrenFundTab" class="tab-content hidden">
@@ -858,11 +821,9 @@
           </div>
         </div>
   </div> -->
-</section>
-
+    </section>
   </div> <!-- end container -->
 
-  
   <script src="script.js"></script>
 </body>
 </html>

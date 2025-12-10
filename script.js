@@ -44,12 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputs = document.querySelectorAll(".num-input");
 
   inputs.forEach(input => {
-
     input.addEventListener("input", (e) => {
       let raw = unformatNumber(e.target.value);
-
       raw = raw.replace(/\D/g, "");
-
       e.target.value = formatNumberWithComma(raw);
     });
 
@@ -63,13 +60,12 @@ let savingsChartInstance = null;
 let liquidityChartInstance = null;
 let debtChartInstance = null;
 let wealthRatio = 0;
-
 let totalSalary = 0;
 let totalExpenses = 0;
 
 window.onload = () => {
   localStorage.clear();
-};
+}; //clear data after refreshing page
 
 function calculate() {
   const salary = document.getElementById("salary").getRawValue() || 0;
@@ -88,7 +84,6 @@ function calculate() {
   const vehicleLoanBalance = document.getElementById("vehicleLoanBalance").getRawValue() || 0;
   const propertyFinancingBalance = document.getElementById("propertyFinancingBalance").getRawValue() || 0;
   const otherLiabilities = document.getElementById("otherLiabilities").getRawValue() || 0;
-
   const income = salary + otherIncome;
   const expenses = creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment + personalHouseholdExpenses + insuranceExpenses + otherExpenses;
   const assets = savings + propertyValue + investmentsValue + retirementFund;
@@ -103,8 +98,7 @@ function calculate() {
   const currentWealthRatio = expenses === 0 ? Infinity : (networth / expenses);
   const savingsratio = income === 0 ? 0 : ((income - expenses) / income) * 100;
   const liquidityratio = expenses === 0 ? Infinity : (savings / expenses);
-  const debtServiceRatio = income === 0 ?
-  0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
+  const debtServiceRatio = income === 0 ? 0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
 
   showResultsSection();
 
@@ -115,7 +109,6 @@ function calculate() {
   document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ? "∞" : liquidityratio.toFixed(2);
   document.getElementById("debtServiceRatio").textContent = debtServiceRatio.toFixed(2) + "%";
   document.getElementById("wealthRatioValue").textContent = wealthRatio.toFixed(2);
-
 
   wealthRatio = currentWealthRatio === Infinity ?
   200 : Math.max(0, Math.min(currentWealthRatio, 200));
@@ -162,12 +155,15 @@ function calculate() {
   localStorage.setItem("totalExpenses", expenses);
   localStorage.setItem("totalLiabilities", liabilities);
   localStorage.setItem("totalAssets", assets);
-  
   localStorage.setItem("retirementFundValue", retirementFund); 
   
   document.getElementById('salaryText').textContent = formatRM(income);
   document.getElementById('expensesText').textContent = formatRM(expenses);
   document.getElementById('netText').textContent = formatRM(cashFlowVal);
+
+  autoGenerate10YearCoverage();
+  initializeTNAData();
+  initializeRetirementData();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -204,8 +200,9 @@ function updateRatiosChart(savingsRatio, liquidityRatio, debtServiceRatio) {
   const liquidityElem = document.getElementById("liquidityratio");
   const debtElem = document.getElementById("debtServiceRatio");
 
-  if (savingsElem) savingsElem.style.color = savingsRatio >= savingsBenchmark ? "#16a34a" : "#dc2626";
   const liquidityValue = liquidityRatio === Infinity ? 200 : liquidityRatio;
+
+  if (savingsElem) savingsElem.style.color = savingsRatio >= savingsBenchmark ? "#16a34a" : "#dc2626";
   if (liquidityElem) liquidityElem.style.color = liquidityValue >= liquidityBenchmark ? "#16a34a" : "#dc2626";
   if (debtElem) debtElem.style.color = debtServiceRatio <= debtBenchmark ? "#16a34a" : "#dc2626";
 
@@ -293,7 +290,11 @@ function showResultsSection() {
   if (resultsSection) {
     resultsSection.classList.add("animate-fadeIn");
     setTimeout(() => {
-      try { resultsSection.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
+      try { 
+        resultsSection.scrollIntoView({ 
+          behavior: "smooth", block: "start" 
+        }); 
+      } catch (e) {}
     }, 400);
   }
 }
@@ -406,20 +407,29 @@ function showCoverage(plan) {
   }
 }
 
+function autoGenerate10YearCoverage() {
+  const salary = Number(localStorage.getItem("totalSalary")) || 0;
+  const expenses = Number(localStorage.getItem("totalExpenses")) || 0;
+
+  if (salary <= 0 || expenses <= 0) return;
+
+  const multiplierTenYear = 120;
+
+  localStorage.setItem("takafulCoverageIncome10Y", String(salary * multiplierTenYear));
+  localStorage.setItem("takafulCoverageExpenses10Y", String(expenses * multiplierTenYear));
+}
+
 function updateLifeProtectionFromBase(selectedBase) {
+
   const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome10Y") || "0");
   const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses10Y") || "0");
+
+  let coverage = selectedBase === "income"? takafulCoverageIncome : takafulCoverageExpenses;
 
   const lifeProtection = document.getElementById("lifeProtection");
   const retrievedValue = document.getElementById("retrievedValue");
 
-  let coverage = selectedBase === "income" ? takafulCoverageIncome : takafulCoverageExpenses;
-
-  if (!coverage || coverage <= 0) coverage = 0;
-
-  if (lifeProtection) {
-    lifeProtection.value = Number(coverage).toLocaleString();
-  }
+  if (lifeProtection) lifeProtection.value = Number(coverage).toLocaleString();
 
   if (retrievedValue) {
     retrievedValue.textContent = `Retrieved 10-Year Coverage Based On ${
@@ -429,17 +439,20 @@ function updateLifeProtectionFromBase(selectedBase) {
   }
 
   localStorage.setItem("takafulBase", selectedBase);
-  localStorage.setItem("takafulResult", String(coverage)); 
+  localStorage.setItem("takafulResult", String(coverage));
   localStorage.setItem("lifeProtection", String(coverage));
 }
 
 function initializeTNAData() {
+
+  autoGenerate10YearCoverage();
+
   const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
-  const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0; 
+  const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0;
   const protectionType = document.getElementById("protectionType");
   const existingLiabilitiesInput = document.getElementById("existingLiabilities");
-  const assetFieldDisplay = document.getElementById("tnaTotalAssetsInput"); 
-    
+  const assetFieldDisplay = document.getElementById("tnaTotalAssetsInput");
+
   if (existingLiabilitiesInput) {
     existingLiabilitiesInput.value = storedLiabilities ? Number(storedLiabilities).toLocaleString() : "";
   }
@@ -449,15 +462,14 @@ function initializeTNAData() {
   }
 
   if (protectionType) {
-    const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
-    const prevBase = localStorage.getItem("takafulBase") || ""; 
-        
+    const prevBase = localStorage.getItem("takafulBase") || "";
+    
     if (prevBase === "income" || prevBase === "expenses") {
       protectionType.value = prevBase;
-    } 
-    else {
-      protectionType.value = takafulCoverageExpenses > 0 ? "expenses" : "income";
+    } else {
+      protectionType.value = "expenses"; // default
     }
+
     updateLifeProtectionFromBase(protectionType.value);
   }
 }
@@ -728,4 +740,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const calcBtn = document.getElementById("calculateBtn");
+  if (calcBtn) {
+    calcBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      calculate();
+    });
+  }
 });
