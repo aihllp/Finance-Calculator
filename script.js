@@ -707,8 +707,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   tabContents.forEach(tc => tc.classList.add("hidden"));
 
-  const defaultTab = document.querySelector("[data-tab='takafulTab']");
-  const defaultContent = document.getElementById("takafulTab");
+  const defaultTab = document.querySelector("[data-tab='retirementTab']");
+  const defaultContent = document.getElementById("retirementTab");
 
   defaultTab.classList.add("active-tab", "border-blue-500");
   defaultTab.classList.remove("text-gray-500");
