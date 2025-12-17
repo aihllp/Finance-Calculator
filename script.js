@@ -44,12 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputs = document.querySelectorAll(".num-input");
 
   inputs.forEach(input => {
-
     input.addEventListener("input", (e) => {
       let raw = unformatNumber(e.target.value);
-
       raw = raw.replace(/\D/g, "");
-
       e.target.value = formatNumberWithComma(raw);
     });
 
@@ -58,15 +55,18 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 });
-// Chart instances
+
 let savingsChartInstance = null;
 let liquidityChartInstance = null;
 let debtChartInstance = null;
 let wealthRatio = 0;
-//store salary/expenses in memory instead of localStorage
 let totalSalary = 0;
 let totalExpenses = 0;
-// Main calculate function
+
+window.onload = () => {
+  localStorage.clear();
+}; //clear data after refreshing page
+
 function calculate() {
   const salary = document.getElementById("salary").getRawValue() || 0;
   const otherIncome = document.getElementById("otherIncome").getRawValue() || 0;
@@ -84,7 +84,6 @@ function calculate() {
   const vehicleLoanBalance = document.getElementById("vehicleLoanBalance").getRawValue() || 0;
   const propertyFinancingBalance = document.getElementById("propertyFinancingBalance").getRawValue() || 0;
   const otherLiabilities = document.getElementById("otherLiabilities").getRawValue() || 0;
-
   const income = salary + otherIncome;
   const expenses = creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment + personalHouseholdExpenses + insuranceExpenses + otherExpenses;
   const assets = savings + propertyValue + investmentsValue + retirementFund;
@@ -99,8 +98,7 @@ function calculate() {
   const currentWealthRatio = expenses === 0 ? Infinity : (networth / expenses);
   const savingsratio = income === 0 ? 0 : ((income - expenses) / income) * 100;
   const liquidityratio = expenses === 0 ? Infinity : (savings / expenses);
-  const debtServiceRatio = income === 0 ?
-  0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
+  const debtServiceRatio = income === 0 ? 0 : ((creditCardRepayment + vehicleLoanRepayment + propertyLoanRepayment) / income) * 100;
 
   showResultsSection();
 
@@ -110,8 +108,8 @@ function calculate() {
   document.getElementById("savingsratio").textContent = savingsratio.toFixed(2) + "%";
   document.getElementById("liquidityratio").textContent = liquidityratio === Infinity ? "∞" : liquidityratio.toFixed(2);
   document.getElementById("debtServiceRatio").textContent = debtServiceRatio.toFixed(2) + "%";
+  document.getElementById("wealthRatioValue").textContent = wealthRatio.toFixed(2);
 
-  // Determine health label based on Wealth Ratio
   wealthRatio = currentWealthRatio === Infinity ?
   200 : Math.max(0, Math.min(currentWealthRatio, 200));
 
@@ -144,6 +142,8 @@ function calculate() {
   }
 
   document.getElementById("health").textContent = healthText;
+  document.getElementById("wealthRatioValue").textContent = wealthRatio.toFixed(2);
+
   const bar = document.getElementById("health-fill");
   bar.style.transition = "all 0.8s ease-in-out";
   bar.style.width = Math.min((wealthRatio / 200) * 100, 100) + "%";
@@ -151,20 +151,21 @@ function calculate() {
 
   updateRatiosChart(savingsratio, liquidityratio, debtServiceRatio);
 
-  //store values in localstorage
   localStorage.setItem("totalSalary", income);
   localStorage.setItem("totalExpenses", expenses);
   localStorage.setItem("totalLiabilities", liabilities);
   localStorage.setItem("totalAssets", assets);
-  // FIX: Store the retirement fund value so the retirement tab can retrieve it.
   localStorage.setItem("retirementFundValue", retirementFund); 
-  //update takaful
+  
   document.getElementById('salaryText').textContent = formatRM(income);
   document.getElementById('expensesText').textContent = formatRM(expenses);
   document.getElementById('netText').textContent = formatRM(cashFlowVal);
+
+  autoGenerate10YearCoverage();
+  initializeTNAData();
+  initializeRetirementData();
 }
 
-// retrieve localstorage data on load
 window.addEventListener("DOMContentLoaded", () => {
   const savedIncome = Number(localStorage.getItem("totalSalary") || 0);
   const savedExpenses = Number(localStorage.getItem("totalExpenses") || 0);
@@ -195,17 +196,16 @@ function updateRatiosChart(savingsRatio, liquidityRatio, debtServiceRatio) {
   const liquidityBenchmark = 3;
   const debtBenchmark = 35;
 
-  //update colors based on benchmarks
   const savingsElem = document.getElementById("savingsratio");
   const liquidityElem = document.getElementById("liquidityratio");
   const debtElem = document.getElementById("debtServiceRatio");
 
-  if (savingsElem) savingsElem.style.color = savingsRatio >= savingsBenchmark ? "#16a34a" : "#dc2626";
   const liquidityValue = liquidityRatio === Infinity ? 200 : liquidityRatio;
+
+  if (savingsElem) savingsElem.style.color = savingsRatio >= savingsBenchmark ? "#16a34a" : "#dc2626";
   if (liquidityElem) liquidityElem.style.color = liquidityValue >= liquidityBenchmark ? "#16a34a" : "#dc2626";
   if (debtElem) debtElem.style.color = debtServiceRatio <= debtBenchmark ? "#16a34a" : "#dc2626";
 
-  //destroy previous chart if exists
   if (savingsChartInstance) savingsChartInstance.destroy();
   if (liquidityChartInstance) liquidityChartInstance.destroy();
   if (debtChartInstance) debtChartInstance.destroy();
@@ -215,7 +215,6 @@ function updateRatiosChart(savingsRatio, liquidityRatio, debtServiceRatio) {
   debtChartInstance = createMiniChart("debtChart","Debt Service", Number(Number(debtServiceRatio).toFixed(2)), debtBenchmark);
 }
 
-//charts for ratios
 function createMiniChart(ctxId, label, userValue, benchmarkValue) {
   const el = document.getElementById(ctxId);
   if (!el) return null;
@@ -223,7 +222,6 @@ function createMiniChart(ctxId, label, userValue, benchmarkValue) {
 
   let resultColor = "";
 
-  // Identify which ratio this chart is for
   const isDebtService = label.toLowerCase().includes("debt");
   if (isDebtService) {
     if (userValue < benchmarkValue) resultColor = "#16a34a";
@@ -292,7 +290,11 @@ function showResultsSection() {
   if (resultsSection) {
     resultsSection.classList.add("animate-fadeIn");
     setTimeout(() => {
-      try { resultsSection.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
+      try { 
+        resultsSection.scrollIntoView({ 
+          behavior: "smooth", block: "start" 
+        }); 
+      } catch (e) {}
     }, 400);
   }
 }
@@ -326,7 +328,7 @@ function toggleInfo(id) {
 }
 
 AOS.init({ duration: 1000, once: true });
-//show takaful section and scroll to it + takaful plan logic
+
 document.addEventListener('DOMContentLoaded', function () {
   const showTakafulBtn = document.getElementById('showTakafulBtn');
   const takafulSection = document.getElementById('takafulSection');
@@ -344,7 +346,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  //takaful plan logic (cards)
   document.querySelectorAll('.coverage-card').forEach(card => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.coverage-card').forEach(c => c.classList.remove('ring'));
@@ -354,7 +355,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-//takaful coverage calculation + chart update
 function showCoverage(plan) {
   const salary = Number(localStorage.getItem("totalSalary")) || 0;
   const expenses = Number(localStorage.getItem("totalExpenses")) || 0;
@@ -364,12 +364,10 @@ function showCoverage(plan) {
     return;
   }
 
-  // Define multipliers for 1-year, 5-year, and 10-year coverage
   const multiplierOneYear = 12;
   const multiplierFiveYear = 60;
-  const multiplierTenYear = 120; // This is the value needed for TNA later
+  const multiplierTenYear = 120;
 
-  // Calculate coverage for the currently selected plan
   let currentMultiplier;
   switch (plan) {
     case "oneYear": currentMultiplier = multiplierOneYear; break;
@@ -381,22 +379,17 @@ function showCoverage(plan) {
   const coverageIncome = salary * currentMultiplier;
   const coverageExpenses = expenses * currentMultiplier;
 
-  // --- NEW: Calculate and Store 10-Year Coverage Separately ---
   const coverageIncome10Y = salary * multiplierTenYear;
   const coverageExpenses10Y = expenses * multiplierTenYear;
   
-  // Store the 10-year values in new keys for reliable retrieval by TNA
   localStorage.setItem("takafulCoverageIncome10Y", String(coverageIncome10Y));
   localStorage.setItem("takafulCoverageExpenses10Y", String(coverageExpenses10Y));
   
-  // --- END NEW ---
-
   const ciEl = document.getElementById('coverageIncome'); 
   const ceEl = document.getElementById('coverageExpenses');
   if (ciEl) ciEl.textContent = formatRM(coverageIncome);
   if (ceEl) ceEl.textContent = formatRM(coverageExpenses);
   
-  // Keep the old keys to store the *currently displayed* value for backward compatibility/other logic
   localStorage.setItem("takafulCoverageIncome", String(coverageIncome)); 
   localStorage.setItem("takafulCoverageExpenses", String(coverageExpenses));
   
@@ -407,7 +400,6 @@ function showCoverage(plan) {
   localStorage.setItem("takafulPlan", plan);
   localStorage.setItem("lifeProtection", String(displayedValue));
   
-  // animate display
   const result = document.getElementById('resultSectionTakaful');
   if (result) {
     result.classList.add('animate-fadeIn');
@@ -415,25 +407,29 @@ function showCoverage(plan) {
   }
 }
 
+function autoGenerate10YearCoverage() {
+  const salary = Number(localStorage.getItem("totalSalary")) || 0;
+  const expenses = Number(localStorage.getItem("totalExpenses")) || 0;
+
+  if (salary <= 0 || expenses <= 0) return;
+
+  const multiplierTenYear = 120;
+
+  localStorage.setItem("takafulCoverageIncome10Y", String(salary * multiplierTenYear));
+  localStorage.setItem("takafulCoverageExpenses10Y", String(expenses * multiplierTenYear));
+}
+
 function updateLifeProtectionFromBase(selectedBase) {
-  // 🔑 Updated to retrieve the dedicated 10-Year storage keys
+
   const takafulCoverageIncome = parseFloat(localStorage.getItem("takafulCoverageIncome10Y") || "0");
   const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses10Y") || "0");
+
+  let coverage = selectedBase === "income"? takafulCoverageIncome : takafulCoverageExpenses;
 
   const lifeProtection = document.getElementById("lifeProtection");
   const retrievedValue = document.getElementById("retrievedValue");
 
-  // Always retrieve only the 10-year values from takaful calculation
-  let coverage = selectedBase === "income" 
-    ? takafulCoverageIncome 
-    : takafulCoverageExpenses;
-
-  // Safety fallback (should rarely happen)
-  if (!coverage || coverage <= 0) coverage = 0;
-
-  if (lifeProtection) {
-    lifeProtection.value = Number(coverage).toLocaleString();
-  }
+  if (lifeProtection) lifeProtection.value = Number(coverage).toLocaleString();
 
   if (retrievedValue) {
     retrievedValue.textContent = `Retrieved 10-Year Coverage Based On ${
@@ -442,21 +438,21 @@ function updateLifeProtectionFromBase(selectedBase) {
     retrievedValue.classList.remove("hidden");
   }
 
-  // Save selected base + value used
   localStorage.setItem("takafulBase", selectedBase);
-  // Store the 10-year coverage value in the result keys
-  localStorage.setItem("takafulResult", String(coverage)); 
+  localStorage.setItem("takafulResult", String(coverage));
   localStorage.setItem("lifeProtection", String(coverage));
 }
 
-
 function initializeTNAData() {
+
+  autoGenerate10YearCoverage();
+
   const storedLiabilities = parseFloat(localStorage.getItem("totalLiabilities") || "0") || 0;
-  const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0; 
+  const storedAssets = parseFloat(localStorage.getItem("totalAssets") || "0") || 0;
   const protectionType = document.getElementById("protectionType");
   const existingLiabilitiesInput = document.getElementById("existingLiabilities");
-  const assetFieldDisplay = document.getElementById("tnaTotalAssetsInput"); 
-    
+  const assetFieldDisplay = document.getElementById("tnaTotalAssetsInput");
+
   if (existingLiabilitiesInput) {
     existingLiabilitiesInput.value = storedLiabilities ? Number(storedLiabilities).toLocaleString() : "";
   }
@@ -466,21 +462,19 @@ function initializeTNAData() {
   }
 
   if (protectionType) {
-    const takafulCoverageExpenses = parseFloat(localStorage.getItem("takafulCoverageExpenses") || "0") || 0;
-    const prevBase = localStorage.getItem("takafulBase") || ""; 
-        
+    const prevBase = localStorage.getItem("takafulBase") || "";
+    
     if (prevBase === "income" || prevBase === "expenses") {
       protectionType.value = prevBase;
-    } 
-    else {
-      protectionType.value = takafulCoverageExpenses > 0 ? "expenses" : "income";
+    } else {
+      protectionType.value = "expenses"; // default
     }
+
     updateLifeProtectionFromBase(protectionType.value);
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Attach change listener for the protection type dropdown
   const protectionType = document.getElementById("protectionType");
   if (protectionType) {
     protectionType.addEventListener("change", () => {
@@ -506,21 +500,36 @@ function calculateNeeds() {
 
   const absGap = Math.abs(remainingGap);
   const resultElement = document.getElementById("remainingGap");
+  const gapLabel = document.getElementById("gapLabel");
 
-  // display results
   document.getElementById("totalNeeds").textContent = "RM " + Number(totalNeeds).toLocaleString();
   document.getElementById("totalAssetsCoverage").textContent = "RM " + Number(totalAssetsCoverage).toLocaleString();
-  resultElement.textContent = "RM " + Number(absGap).toLocaleString();
 
   resultElement.classList.remove('text-yellow-600', 'text-red-600', 'text-green-600', 'text-blue-600');
+
+  if (remainingGap > 0) {
+    gapLabel.textContent = "SHORTFALL";
+    resultElement.textContent = "RM " + Number(absGap).toLocaleString();
+    resultElement.classList.add("text-red-600");
+
+  } else if (remainingGap < 0) {
+    gapLabel.textContent = "SURPLUS";
+    resultElement.textContent = "RM " + Number(absGap).toLocaleString();
+    resultElement.classList.add("text-green-600");
+
+  } else {
+    gapLabel.textContent = "Balanced";
+    resultElement.textContent = "RM 0";
+    resultElement.classList.add("text-blue-600");
+  }
 
   let statusMessage = '';
   if (remainingGap > 0) {
     resultElement.classList.add('text-red-600');
-    statusMessage = `You have a financial **shortfall** of RM ${Number(absGap).toLocaleString()}. Consider increasing your coverage.`;
+    statusMessage = `You have a financial SHORTFALL of RM ${Number(absGap).toLocaleString()}. Consider increasing your coverage.`;
   } else if (remainingGap < 0) {
     resultElement.classList.add('text-green-600');
-    statusMessage = `You have a financial **surplus** of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
+    statusMessage = `You have a financial SURPLUS of RM ${Number(absGap).toLocaleString()}. Your coverage is sufficient.`;
   } else {
     resultElement.classList.add('text-blue-600');
     statusMessage = `Your needs and coverage are perfectly balanced!`;
@@ -540,7 +549,6 @@ function calculateRetirement() {
   const n  = retAge - currentAge; // until retirement
   const n1 = maxAge - retAge; // during retirement
   
-  // Economic assumptions
   const annualExpPct = getNumericValue("annualExpPct", true); // % of salary
   const i = getNumericValue("inflationRateRet", true); // Inflation
   const g_ret = getNumericValue("retInvReturn", true); // Return during retirement
@@ -586,38 +594,44 @@ function calculateRetirement() {
   const FV2 = calculateFundFV(getNumericValue("fund2Value"), getNumericValue("fund2Return", true), getNumericValue("fund2AnnualInv"), n);
   const projectedAvailableFund = EPF1 + EPF2 + FV1 + FV2;  
   
+  document.getElementById("fund1ProjectedValue").textContent = formatRM(FV1);
+  document.getElementById("fund2ProjectedValue").textContent = formatRM(FV2);
+  
   const retirementGap = retirementFundNeeded - projectedAvailableFund;
   const absGap = Math.abs(retirementGap);
 
-  // Update UI
   document.getElementById("retFundNeeded").textContent = formatRM(retirementFundNeeded);
   document.getElementById("retFundAvailable").textContent = formatRM(projectedAvailableFund);
 
+  const gapLabelRet = document.getElementById("gapLabelRet");
   const gapElement = document.getElementById("retGap");
   const messageElement = document.getElementById("retGapMessage");
-  // Reset classes
+  
   gapElement.classList.remove("text-pink-600", "text-green-600", "text-blue-600");
 
   let message = "";
   if (retirementGap > 0) {
+    gapLabelRet.textContent = "SHORTFALL";
     gapElement.classList.add("text-pink-600");
-    gapElement.textContent = "- " + formatRM(absGap); message = `You have a projected shortfall of <strong>${formatRM(absGap)}</strong>.<br>Consider increasing your EPF contributions or additional investments.`;
+    gapElement.textContent = "- " + formatRM(absGap); message = `You have a projected SHORTFALL of <strong>${formatRM(absGap)}</strong>.<br>Consider increasing your EPF contributions or additional investments.`;
   }
   else if (retirementGap < 0) {
+    gapLabelRet.textContent = "SURPLUS";
     gapElement.classList.add("text-green-600");
     gapElement.textContent = "+ " + formatRM(absGap);
-    message = `Great job! You have a projected surplus of <strong>${formatRM(absGap)}</strong>.<br>Your retirement plan is on track.`;
+    message = `Great job! You have a projected SURPLUS of <strong>${formatRM(absGap)}</strong>.<br>Your retirement plan is on track.`;
   } 
   else {
+    gapLabelRet.textContent = "EQUAL";
     gapElement.classList.add("text-blue-600");
     gapElement.textContent = "RM 0.00";
     message = `Your projected funds match your estimated needs.`;
   }
   messageElement.innerHTML = message;
-  // Show section
+  
   const resultsSection = document.getElementById("retResultsSection");
   if (resultsSection) resultsSection.classList.remove("hidden");
-  }
+}
 
 function initializeRetirementData() {
   const storedMonthlySalary = parseFloat(localStorage.getItem("totalSalary") || "0") || 0;
@@ -626,8 +640,7 @@ function initializeRetirementData() {
   const retirementFundInputValue = retirementFundInput ? retirementFundInput.getRawValue() : "0";
   const storedEPF_raw = retirementFundInputValue || localStorage.getItem("retirementFund") || localStorage.getItem("retirementFundValue") || localStorage.getItem("mainRetirementFundValue") || "0";
   const storedEPF = parseFloat(String(storedEPF_raw).replace(/[^\d.-]/g, "")) || 0; 
-    
-  // Get element references
+  
   const salaryInput = document.getElementById("retCurrentSalary");
   const epfInput = document.getElementById("retCurrentFund");
   const currentAgeInput = document.getElementById("retCurrentAge");
@@ -643,65 +656,98 @@ function initializeRetirementData() {
   }
 
   if (epfInput) {
-    epfInput.readOnly = true; // Ensures the input is read-only
+    epfInput.readOnly = true;
     epfInput.classList.add("bg-gray-100");      
     epfInput.value = storedEPF > 0 ? Number(storedEPF).toLocaleString("en-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "";
   }
 }
 
-// Auto-run sync on load
+function parseRM(value) {
+    if (!value) return 0;
+    return Number(value.toString().replace(/[^0-9.-]/g, "")) || 0;
+}
+
+function futureValue(PV, r, n, annual) {
+    const growth = Math.pow(1 + r, n);
+    const fvPV = PV * growth;
+    const fvPMT = r > 0 ? annual * ((growth - 1) / r) : annual * n;
+    return fvPV + fvPMT;
+}
+
+function calculateFund1() {
+    const PV = parseRM(document.getElementById("invFund1Value").value);
+    const R  = Number(document.getElementById("invFund1Return").value) / 100;
+    const PMT = parseRM(document.getElementById("invFund1AnnualInv").value);
+    const N = Number(document.getElementById("invFund1Years").value);
+
+    const FV = futureValue(PV, R, N, PMT);
+    document.getElementById("invFund1Projected").textContent = formatRM(FV);
+}
+
+function calculateFund2() {
+    const PV = parseRM(document.getElementById("invFund2Value").value);
+    const R  = Number(document.getElementById("invFund2Return").value) / 100;
+    const PMT = parseRM(document.getElementById("invFund2AnnualInv").value);
+    const N = Number(document.getElementById("invFund2Years").value);
+
+    const FV = futureValue(PV, R, N, PMT);
+    document.getElementById("invFund2Projected").textContent = formatRM(FV);
+}
+
 document.addEventListener("DOMContentLoaded", initializeRetirementData);
 
 document.addEventListener("DOMContentLoaded", () => {
   const tabButtons = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
 
-  // 1. Remove active style from ALL tabs
   tabButtons.forEach(btn => {
     btn.classList.remove("active-tab", "border-blue-500");
     btn.classList.add("text-gray-500");
   });
 
-  // 2. Hide all tab contents
   tabContents.forEach(tc => tc.classList.add("hidden"));
 
-  // 3. Set DEFAULT active tab = Takaful
-  const defaultTab = document.querySelector("[data-tab='takafulTab']");
-  const defaultContent = document.getElementById("takafulTab");
+  const defaultTab = document.querySelector("[data-tab='retirementTab']");
+  const defaultContent = document.getElementById("retirementTab");
 
-  // Highlight Takaful button
   defaultTab.classList.add("active-tab", "border-blue-500");
   defaultTab.classList.remove("text-gray-500");
 
-  // Show Takaful content
   defaultContent.classList.remove("hidden");
-
-  // 4. Set click behaviour
+  
   tabButtons.forEach(btn => 
   {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.tab;
-      // Reset all tabs
+      
       tabButtons.forEach(b => {
         b.classList.remove("active-tab", "border-blue-500");
         b.classList.add("text-gray-500");
       });
-      // Hide all contents
+
       tabContents.forEach(tc => tc.classList.add("hidden"));
-      // Activate clicked tab
+      
       btn.classList.add("active-tab", "border-blue-500");
       btn.classList.remove("text-gray-500");
-      // Show target content
+      
       document.getElementById(targetId).classList.remove("hidden");
       if (targetId === "tnaTab") {
         initializeTNAData();
-      // 2. Call the function when the TNA tab is clicked
       }
 
       if (targetId === "retirementTab") {
         initializeRetirementData();
-      // 2. Call the function when the Retirement tab is clicked
       }
     });
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const calcBtn = document.getElementById("calculateBtn");
+  if (calcBtn) {
+    calcBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      calculate();
+    });
+  }
 });
